@@ -1,32 +1,28 @@
 {
   "expo": {
-    "name": "my-project",
-    "slug": "my-project",
+    "name": "Yasalam",
+    "slug": "yasalam",
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./app/assets/yasalam-logo-square.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./app/assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#e63c4b"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
+    "description": "Your newest convenient partner to access active places,engage and have fun with family-friendly vicinities, indulge with world-class dishes and more. It's about creating a place for everyone!",
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      "package": "com.yasalam.package",
+      "versionCode": 1,
+      "permissions": []
     }
   }
 }
