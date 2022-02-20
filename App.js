@@ -10,6 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { NavigationContainer } from '@react-navigation/native';
 import navigationTheme from './app/navigation/navigationTheme';
+import AppNavigator from './app/navigation/AppNavigator';
+import AuthNavigator from './app/navigation/AuthNavigator';
 
 export default function App() {
   usePreventScreenCapture();
@@ -35,9 +37,7 @@ export default function App() {
       <WrapperContainer>
         {hasLaunched ? (
           <NavigationContainer theme={navigationTheme}>
-            <Button success>
-              <Text>Success</Text>
-            </Button>
+            <AuthNavigator />
           </NavigationContainer>
         ) : (
           <IntroSlider />

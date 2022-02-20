@@ -1,41 +1,40 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import HomeNavigator from "./HomeNavigator";
-import QRScreen from "../screens/QRScreen";
+import HomeNavigator from './HomeNavigator';
+import QRScreen from '../screens/QRScreen';
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigator = () =>  {
-
+const TabNavigator = () => {
   return (
-  <Tab.Navigator initialRouteName="Feed" screenOptions={{
-      
-  }}>
-    <Tab.Screen
-      name="QRNav"
-      component={QRScreen}
-      options={{
-        title: 'QR Code',
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="qrcode" color={color} size={size} />
-        ),
-      }}
-    /> 
-    <Tab.Screen
-      name="Feed"
-      component={HomeNavigator}
-      options={{
-        title: 'Home',
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name="home" color={color} size={size} />
-        ),
-      }}
-    />
-    
-  </Tab.Navigator>
-);
-}
+    <Tab.Navigator
+      initialRouteName='HomeNav'
+      screenOptions={{ headerShown: false }}
+    >
+      <Tab.Screen
+        name='QRNav'
+        component={QRScreen}
+        options={{
+          title: 'QR Code',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name='qrcode' color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='HomeNav'
+        component={HomeNavigator}
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name='home' color={color} size={size} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 export default TabNavigator;
