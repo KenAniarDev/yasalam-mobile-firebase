@@ -1,108 +1,139 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, Text, Flex, Image, View } from 'native-base';
 import ScreenWrapper from '../components/ScreenWrapper';
 import Tabs from '../components/Tabs';
 import SearchWithFilter from '../components/SearchWithFilter';
 import colors from '../config/colors';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../utility/firebase';
+import moment from 'moment';
 
-const data = [
-  {
-    id: 1,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-  {
-    id: 2,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-  {
-    id: 3,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-  {
-    id: 4,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-  {
-    id: 5,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-];
+const YasalamScreen = ({ navigation }) => {
+  const currentDate = moment(new Date()).format('YYYY-MM-DD');
+  const [outlets, setOutlets] = useState([]);
+  const [filteredOutlets, setFilteredOutlets] = useState([]);
 
-const YasalamScreen = ({ navigation }) => (
-  <ScreenWrapper>
-    <Tabs active='yasalam' navigation={navigation} />
-    <SearchWithFilter />
-    <View>
-      <FlatList
-        px='4'
-        width='100%'
-        data={data}
-        renderItem={({ item }) => (
-          <Flex
-            backgroundColor='white'
-            flexDirection='row'
-            alignItems='center'
-            borderRadius='20'
-            py='10'
-            mb='4'
-            position='relative'
-          >
-            <Image
-              size='md'
-              width='150'
-              resizeMode='contain'
-              source={{
-                uri: item.image,
-              }}
-              alt={'outlet ' + item.name}
-            />
-            <View>
-              <Text fontSize='lg'>{item.name}</Text>
-              <Text fontSize='sm' color='gray' style={{ maxWidth: 200 }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              </Text>
-            </View>
+  const [filterVal, setFilterVal] = useState({
+    searchText: '',
+    category: '',
+    region: '',
+    feature: '',
+  });
 
-            <Flex flexDirection='row' position='absolute' right='5' top='1'>
-              <Text fontSize='2xl' color={colors.secondary}>
-                10
-              </Text>
-              <Text mt='3'>/10</Text>
-            </Flex>
+  const handleSearch = ({ searchText, category, region, feature }) => {
+    const searchTextRegex = new RegExp(`${searchText}`, 'gi');
+    const categoryRegex = new RegExp(`${category}`, 'gi');
+    const regionRegex = new RegExp(`${region}`, 'gi');
+    const featureRegex = new RegExp(`${feature}`, 'gi');
+
+    const filtered = outlets.filter((val) => {
+      if (
+        val.name.match(searchTextRegex) &&
+        val.categoryId.match(categoryRegex) &&
+        val.regionId.match(regionRegex) &&
+        val.featureId.match(featureRegex)
+      ) {
+        console.log('left here');
+        return val;
+      }
+    });
+    setFilteredOutlets(filtered);
+  };
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
+      let data = [];
+      snapshot.docs.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      setOutlets(data);
+      handleSearch(filterVal);
+    });
+
+    return () => unsubscribe();
+  }, []);
+  return (
+    <ScreenWrapper>
+      <Tabs active='yasalam' navigation={navigation} />
+      <SearchWithFilter
+        handleSearch={handleSearch}
+        filterVal={filterVal}
+        setFilterVal={setFilterVal}
+      />
+      <View>
+        <FlatList
+          px='4'
+          width='100%'
+          data={filteredOutlets}
+          renderItem={({ item }) => (
             <Flex
+              backgroundColor='white'
               flexDirection='row'
               alignItems='center'
-              position='absolute'
-              right='5'
-              bottom='3'
+              borderRadius='20'
+              py='10'
+              mb='4'
+              position='relative'
             >
-              <Text color={colors.secondary}>Abu Dhabi</Text>
-              <Text mx='2'>|</Text>
-              <Text color={colors.yellow}>Hotel</Text>
-              <Text mx='2'>|</Text>
-              <Text color={colors.primary}>Family</Text>
+              <Image
+                size='md'
+                width='150'
+                resizeMode='contain'
+                source={{
+                  uri: item.logo,
+                }}
+                alt={'outlet ' + item.name}
+              />
+              <View>
+                <Text fontSize='lg' style={{ maxWidth: 200 }}>
+                  {item.name}
+                </Text>
+                <Text fontSize='sm' color='gray' style={{ maxWidth: 200 }}>
+                  {item.address}
+                </Text>
+              </View>
+
+              <Flex flexDirection='row' position='absolute' right='5' top='1'>
+                <Text fontSize='2xl' color={colors.secondary}>
+                  {item.currentVisitDate ? (
+                    <>
+                      {item.currentVisitDate !== currentDate ? (
+                        10
+                      ) : (
+                        <>{item.visits ? 10 - item.visits : 10}</>
+                      )}
+                    </>
+                  ) : (
+                    10
+                  )}
+                </Text>
+                <Text mt='3'>/10</Text>
+              </Flex>
+              <Flex
+                flexDirection='row'
+                alignItems='center'
+                position='absolute'
+                right='5'
+                bottom='3'
+              >
+                <Text color={colors.secondary}>{item.regionName}</Text>
+                <Text mx='2'>|</Text>
+                <Text color={colors.yellow}>{item.categoryName}</Text>
+                <Text mx='2'>|</Text>
+                <Text color={colors.primary}>{item.featureName}</Text>
+              </Flex>
             </Flex>
-          </Flex>
-        )}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        // refreshing={refreshing}
-        // onRefresh={() => {
-        //   fetchData();
-        // }}
-      />
-    </View>
-  </ScreenWrapper>
-);
+          )}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+          // refreshing={refreshing}
+          // onRefresh={() => {
+          //   fetchData();
+          // }}
+        />
+      </View>
+    </ScreenWrapper>
+  );
+};
 
 export default YasalamScreen;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Text, Pressable, Image, View, Flex, FlatList } from 'native-base';
 import ScreenWrapper from '../components/ScreenWrapper';
 import { StyleSheet } from 'react-native';
@@ -38,7 +37,7 @@ const data = [
   },
 ];
 
-const Banner = ({ navigation }) => {
+const Banner = ({ navigation, title }) => {
   return (
     <View style={styles.banner}>
       <Image
@@ -57,23 +56,25 @@ const Banner = ({ navigation }) => {
           <Ionicons name='menu-sharp' size={34} color='white' />
         </Pressable>
         <Text fontSize='4xl' bold letterSpacing={3} uppercase color='white'>
-          Hotels
+          {title}
         </Text>
       </View>
     </View>
   );
 };
 
-export default function SingleCategoryScreen({ navigation }) {
+export default function SingleCategoryScreen({ navigation, route }) {
+  const outlets = route.params.outlets;
+
   return (
     <ScreenWrapper>
-      <Banner navigation={navigation} />
+      <Banner navigation={navigation} title={route.params.title} />
       <View>
         <FlatList
           my='4'
           px='4'
           width='100%'
-          data={data}
+          data={outlets}
           renderItem={({ item }) => (
             <Flex
               backgroundColor='white'
@@ -89,12 +90,14 @@ export default function SingleCategoryScreen({ navigation }) {
                 width='150'
                 resizeMode='contain'
                 source={{
-                  uri: item.image,
+                  uri: item.logo,
                 }}
                 alt={'outlet ' + item.name}
               />
               <View>
-                <Text fontSize='lg'>{item.name}</Text>
+                <Text fontSize='lg' style={{ maxWidth: 200 }}>
+                  {item.name}
+                </Text>
                 <Text fontSize='sm' color='gray' style={{ maxWidth: 200 }}>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                 </Text>

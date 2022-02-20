@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, Pressable, FlatList, View, Image, Flex } from 'native-base';
 import colors from '../config/colors';
 
@@ -9,44 +9,56 @@ const renderItem = ({ item }) => (
       width='150'
       resizeMode='contain'
       source={{
-        uri: item.image,
+        uri: item.logo,
       }}
       alt={'outlet ' + item.name}
     />
 
-    <Flex direction='row' justifyContent='center'>
-      <Text fontSize='md' mt='2' bold numberOfLines={1}>
+    <Flex direction='row' justifyContent='center' flexWrap='wrap' width='150'>
+      <Text
+        fontSize='md'
+        mt='2'
+        bold
+        style={{ maxWidth: 200, textAlign: 'center' }}
+      >
         {item.name}
       </Text>
     </Flex>
   </Pressable>
 );
 
-const HomeOutletList = ({ data, navigation }) => (
-  <View p='6'>
-    <Flex
-      pb='4'
-      flexDirection='row'
-      justify='space-between'
-      alignItems='center'
-    >
-      <Text bold fontSize='2xl'>
-        Hotels
-      </Text>
-      <Pressable onPress={() => navigation.navigate('SingleCategory')}>
-        <Text fontSize='md' color={colors.primary}>
-          VIEW
+const HomeOutletList = ({ data, navigation, title }) => {
+  useEffect(() => {}, [data]);
+  return (
+    <View p='6'>
+      <Flex
+        pb='4'
+        flexDirection='row'
+        justify='space-between'
+        alignItems='center'
+      >
+        <Text bold fontSize='2xl'>
+          {title}
         </Text>
-      </Pressable>
-    </Flex>
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-    />
-  </View>
-);
+        <Pressable
+          onPress={() =>
+            navigation.navigate('SingleCategory', { outlets: data, title })
+          }
+        >
+          <Text fontSize='md' color={colors.primary}>
+            VIEW
+          </Text>
+        </Pressable>
+      </Flex>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+    </View>
+  );
+};
 
 export default HomeOutletList;

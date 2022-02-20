@@ -16,7 +16,8 @@ import RadioButtonGroup, { RadioButtonItem } from 'expo-radio-button';
 import { Ionicons } from '@expo/vector-icons';
 import useStore from '../hooks/useStore';
 
-const Search = ({ handleSearch, filterVal, setFilterVal }) => {
+const YasalamSearch = () => {
+  const [text, setText] = useState('');
   const [open, setOpen] = useState(false);
 
   const openModal = () => {
@@ -36,11 +37,9 @@ const Search = ({ handleSearch, filterVal, setFilterVal }) => {
               style={styles.input}
               placeholder='Search Here'
               placeholderTextColor='#333'
-              value={filterVal.searchText}
-              onChangeText={(value) =>
-                setFilterVal({ ...filterVal, searchText: value })
-              }
-              onSubmitEditing={() => handleSearch(filterVal)}
+              value={text}
+              onChangeText={(value) => setText(value)}
+              onSubmitEditing={() => {}}
               returnKeyType={'search'}
             />
           </View>
@@ -49,28 +48,17 @@ const Search = ({ handleSearch, filterVal, setFilterVal }) => {
           </Pressable>
         </Flex>
       </View>
-      <ModalComponent
-        open={open}
-        setOpen={setOpen}
-        filterVal={filterVal}
-        setFilterVal={setFilterVal}
-        handleSearch={() => handleSearch(filterVal)}
-      />
+      <ModalComponent open={open} setOpen={setOpen} />
     </>
   );
 };
 
-const ModalComponent = ({
-  open,
-  setOpen,
-  filterVal,
-  setFilterVal,
-  handleSearch,
-}) => {
+const ModalComponent = ({ open, setOpen }) => {
   const categories = useStore((state) => state.categories);
   const regions = useStore((state) => state.regions);
   const features = useStore((state) => state.features);
 
+  const [cat, setCat] = useState(categories[0]);
   const [isCollapsed, setIsCollapsed] = useState({
     category: false,
     region: false,
@@ -80,19 +68,19 @@ const ModalComponent = ({
   useEffect(() => {
     if (categories[0].name !== 'All') {
       categories.unshift({
-        id: '',
+        id: '8172431808asd80da8s098123081231329',
         name: 'All',
       });
     }
     if (regions[0].name !== 'All') {
       regions.unshift({
-        id: '',
+        id: '8172431808asd80da8s098123081231329',
         name: 'All',
       });
     }
     if (features[0].name !== 'All') {
       features.unshift({
-        id: '',
+        id: '8172431808asd80da8s098123081231329',
         name: 'All',
       });
     }
@@ -163,10 +151,8 @@ const ModalComponent = ({
                     containerStyle={{
                       width: '100%',
                     }}
-                    selected={filterVal.category}
-                    onSelected={(value) =>
-                      setFilterVal({ ...filterVal, category: value })
-                    }
+                    selected={cat}
+                    onSelected={(value) => setCat(value)}
                     radioBackground='#17B9CF'
                     size={20}
                   >
@@ -209,10 +195,8 @@ const ModalComponent = ({
                     containerStyle={{
                       width: '100%',
                     }}
-                    selected={filterVal.region}
-                    onSelected={(value) =>
-                      setFilterVal({ ...filterVal, region: value })
-                    }
+                    selected={cat}
+                    onSelected={(value) => setCat(value)}
                     radioBackground='#17B9CF'
                     size={20}
                   >
@@ -255,10 +239,8 @@ const ModalComponent = ({
                     containerStyle={{
                       width: '100%',
                     }}
-                    selected={filterVal.feature}
-                    onSelected={(value) =>
-                      setFilterVal({ ...filterVal, feature: value })
-                    }
+                    selected={cat}
+                    onSelected={(value) => setCat(value)}
                     radioBackground='#17B9CF'
                     size={20}
                   >
@@ -282,7 +264,6 @@ const ModalComponent = ({
               width='100%'
               py='3'
               onPress={() => {
-                handleSearch();
                 setOpen(false);
               }}
             >
@@ -328,4 +309,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Search;
+export default YasalamSearch;

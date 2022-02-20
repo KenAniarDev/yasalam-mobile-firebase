@@ -14,7 +14,7 @@ import AppNavigator from './app/navigation/AppNavigator';
 import AuthNavigator from './app/navigation/AuthNavigator';
 
 export default function App() {
-  usePreventScreenCapture();
+  // usePreventScreenCapture();
   const hasLaunched = useStore((state) => state.hasLaunched);
   const setHasLaunched = useStore((state) => state.setHasLaunched);
 
@@ -37,7 +37,7 @@ export default function App() {
       <WrapperContainer>
         {hasLaunched ? (
           <NavigationContainer theme={navigationTheme}>
-            <AuthNavigator />
+            <AppNavigator />
           </NavigationContainer>
         ) : (
           <IntroSlider />
