@@ -1,3 +1,5 @@
+import { onSnapshot, doc, collection } from 'firebase/firestore';
+import { db } from '../utility/firebase';
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -6,25 +8,24 @@ import {
   RefreshControl,
   Touchable,
 } from 'react-native';
-import { Image, Flex, View, Text } from 'native-base';
+import { Image, Flex, View, Text, FlatList, Pressable } from 'native-base';
 import * as Linking from 'expo-linking';
 import { SliderBox } from 'react-native-image-slider-box';
 import colors from '../config/colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { WebView } from 'react-native-webview';
-
+import moment from 'moment';
 import * as Location from 'expo-location';
-
-// import ActivityIndicator from '../components/ActivityIndicator';
 
 import haversine from 'haversine-distance';
 
-const openURL = (url) => {
-  Linking.openURL(url).catch((err) => console.error('An error occurred', err));
-};
-
 const SingleOutletScreen = ({ navigation, route }) => {
+  const currentDate = moment(new Date()).format('YYYY-MM-DD');
   const outlet = route.params.item;
+  const [visits, setVisits] = useState(0);
+  const [location, setLocation] = useState(undefined);
+  const [branches, setBranches] = useState([]);
+
   const [webHeight, setWebHeight] = useState(100);
   const webViewScript = `
     setTimeout(function() { 
@@ -32,6 +33,53 @@ const SingleOutletScreen = ({ navigation, route }) => {
     }, 500);
     true; // note: this is required, or you'll sometimes get silent failures
     `;
+
+  const getLocation = async () => {
+    try {
+      const { granted } = await Location.requestForegroundPermissionsAsync();
+      if (!granted) return;
+      const {
+        coords: { latitude, longitude },
+      } = await Location.getLastKnownPositionAsync();
+      setLocation({ latitude, longitude });
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getLocation();
+
+    if (typeof outlet.currentVisitDate !== 'undefined') {
+      if (outlet.currentVisitDate !== currentDate) {
+        setVisits(0);
+      } else {
+        setVisits(outlet.visits);
+      }
+    } else {
+      setVisits(0);
+    }
+
+    const unsub = onSnapshot(doc(db, 'outlets', outlet.id), (doc) => {
+      setVisits(doc.data().visits);
+    });
+
+    const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
+      let data = [];
+      snapshot.docs.forEach((doc) => {
+        if (
+          doc.id !== outlet.id &&
+          doc.data().outletgroupId === outlet.outletgroupId
+        ) {
+          data.push({ ...doc.data(), id: doc.id });
+        }
+      });
+      setBranches(data);
+    });
+
+    return () => {
+      unsubscribe();
+      unsub();
+    };
+  }, []);
   return (
     <>
       <ScrollView
@@ -112,9 +160,15 @@ const SingleOutletScreen = ({ navigation, route }) => {
             <Text fontSize='md'>{outlet.address}</Text>
             <TouchableOpacity
               onPress={() => {
-                // Linking.openURL(
-                //   `https://www.google.com/maps/dir/${outlet.latitude},${outlet.longitude}/${location.latitude},${location.longitude}`
-                // )
+                if (location) {
+                  Linking.openURL(
+                    `https://www.google.com/maps/dir/${outlet.latitude},${outlet.longitude}/${location.latitude},${location.longitude}`
+                  );
+                } else {
+                  Linking.openURL(
+                    `https://www.google.com/maps/dir/${outlet.latitude},${outlet.longitude}/`
+                  );
+                }
               }}
             >
               <Flex
@@ -153,7 +207,17 @@ const SingleOutletScreen = ({ navigation, route }) => {
               <Text fontSize='xl'>Entries</Text>
               <Flex flexDirection='row'>
                 <Text fontSize='4xl' color={colors.secondary}>
-                  10
+                  {outlet.currentVisitDate ? (
+                    <>
+                      {outlet.currentVisitDate !== currentDate ? (
+                        10
+                      ) : (
+                        <>{outlet.visits ? 10 - outlet.visits : 10}</>
+                      )}
+                    </>
+                  ) : (
+                    10
+                  )}
                 </Text>
                 <Text fontSize='md' mt='3'>
                   /10
@@ -337,6 +401,128 @@ const SingleOutletScreen = ({ navigation, route }) => {
                 }}
               />
             </View>
+          )}
+          {outlet.outletgroupName !== 'Single' ? (
+            <>
+              <Text fontSize='xl' mt='6' mb='2'>
+                Branches
+              </Text>
+              {branches.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => navigation.navigate('SingleOutlet', { item })}
+                >
+                  <Flex
+                    backgroundColor='white'
+                    flexDirection='row'
+                    alignItems='center'
+                    borderRadius='20'
+                    py='16'
+                    mb='4'
+                    position='relative'
+                    borderColor={colors.primary}
+                    borderWidth='2'
+                  >
+                    <Image
+                      size='md'
+                      width='150'
+                      resizeMode='contain'
+                      source={{
+                        uri: item.logo,
+                      }}
+                      alt={'outlet ' + item.name}
+                    />
+                    <View>
+                      <Text fontSize='lg' style={{ maxWidth: 200 }}>
+                        {item.name}
+                      </Text>
+                      <Text
+                        fontSize='sm'
+                        color='gray'
+                        style={{ maxWidth: 200 }}
+                      >
+                        {item.address}
+                      </Text>
+                      <Text color={colors.secondary}>- {item.regionName}</Text>
+                    </View>
+
+                    <Flex
+                      flexDirection='row'
+                      position='absolute'
+                      right='5'
+                      top='1'
+                    >
+                      <Text fontSize='2xl' color={colors.secondary}>
+                        {item.currentVisitDate ? (
+                          <>
+                            {item.currentVisitDate !== currentDate ? (
+                              10
+                            ) : (
+                              <>{item.visits ? 10 - item.visits : 10}</>
+                            )}
+                          </>
+                        ) : (
+                          10
+                        )}
+                      </Text>
+                      <Text mt='3'>/10</Text>
+                    </Flex>
+                    <Flex
+                      flexDirection='row'
+                      alignItems='center'
+                      justifyContent='space-between'
+                      position='absolute'
+                      right='5'
+                      left='5'
+                      bottom='3'
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (location) {
+                            Linking.openURL(
+                              `https://www.google.com/maps/dir/${item.latitude},${item.longitude}/${location.latitude},${location.longitude}`
+                            );
+                          } else {
+                            Linking.openURL(
+                              `https://www.google.com/maps/dir/${item.latitude},${item.longitude}/`
+                            );
+                          }
+                        }}
+                      >
+                        <Flex
+                          flexDirection='row'
+                          alignItems='center'
+                          justifyContent='center'
+                          backgroundColor={colors.dark}
+                          p='2'
+                          borderRadius='10'
+                        >
+                          <Text
+                            color={colors.white}
+                            fontSize='xs'
+                            textTransform='uppercase'
+                          >
+                            Get Directions
+                            {/* - 100KM */}
+                          </Text>
+                        </Flex>
+                      </TouchableOpacity>
+                      <Flex
+                        flexDirection='row'
+                        alignItems='center'
+                        justifyContent='flex-end'
+                      >
+                        <Text color={colors.yellow}>{item.categoryName}</Text>
+                        <Text mx='2'>|</Text>
+                        <Text color={colors.primary}>{item.featureName}</Text>
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                </TouchableOpacity>
+              ))}
+            </>
+          ) : (
+            <Text> No Branches</Text>
           )}
         </View>
       </ScrollView>
