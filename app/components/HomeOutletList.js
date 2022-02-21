@@ -2,31 +2,6 @@ import React, { useEffect } from 'react';
 import { Text, Pressable, FlatList, View, Image, Flex } from 'native-base';
 import colors from '../config/colors';
 
-const renderItem = ({ item }) => (
-  <Pressable p='4' mr='4' rounded='20' background='white'>
-    <Image
-      size='md'
-      width='150'
-      resizeMode='contain'
-      source={{
-        uri: item.logo,
-      }}
-      alt={'outlet ' + item.name}
-    />
-
-    <Flex direction='row' justifyContent='center' flexWrap='wrap' width='150'>
-      <Text
-        fontSize='md'
-        mt='2'
-        bold
-        style={{ maxWidth: 200, textAlign: 'center' }}
-      >
-        {item.name}
-      </Text>
-    </Flex>
-  </Pressable>
-);
-
 const HomeOutletList = ({ data, navigation, title }) => {
   useEffect(() => {}, [data]);
   return (
@@ -52,7 +27,41 @@ const HomeOutletList = ({ data, navigation, title }) => {
       </Flex>
       <FlatList
         data={data}
-        renderItem={renderItem}
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() => navigation.navigate('SingleOutlet', { item })}
+            p='4'
+            mr='4'
+            rounded='20'
+            background='white'
+          >
+            <Image
+              size='md'
+              width='150'
+              resizeMode='contain'
+              source={{
+                uri: item.logo,
+              }}
+              alt={'outlet ' + item.name}
+            />
+
+            <Flex
+              direction='row'
+              justifyContent='center'
+              flexWrap='wrap'
+              width='150'
+            >
+              <Text
+                fontSize='md'
+                mt='2'
+                bold
+                style={{ maxWidth: 200, textAlign: 'center' }}
+              >
+                {item.name}
+              </Text>
+            </Flex>
+          </Pressable>
+        )}
         keyExtractor={(item) => item.id}
         horizontal
         showsHorizontalScrollIndicator={false}

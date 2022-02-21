@@ -25,8 +25,8 @@ function RegisterScreen({ navigation, route }) {
         source={{
           uri:
             route.params.type === 'Individual'
-              ? 'https://yasalamae.ae/individual-register'
-              : 'https://yasalamae.ae/family-register',
+              ? 'https://yasalam.vercel.app/register/individual'
+              : 'https://yasalam.vercel.app/register/family',
         }}
         automaticallyAdjustContentInsets={false}
         scrollEnabled={false}

@@ -76,46 +76,50 @@ export default function SingleCategoryScreen({ navigation, route }) {
           width='100%'
           data={outlets}
           renderItem={({ item }) => (
-            <Flex
-              backgroundColor='white'
-              flexDirection='row'
-              alignItems='center'
-              borderRadius='20'
-              py='10'
-              mb='4'
-              position='relative'
+            <Pressable
+              onPress={() => navigation.navigate('SingleOutlet', { item })}
             >
-              <Image
-                size='md'
-                width='150'
-                resizeMode='contain'
-                source={{
-                  uri: item.logo,
-                }}
-                alt={'outlet ' + item.name}
-              />
-              <View>
-                <Text fontSize='lg' style={{ maxWidth: 200 }}>
-                  {item.name}
-                </Text>
-                <Text fontSize='sm' color='gray' style={{ maxWidth: 200 }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                </Text>
-              </View>
               <Flex
+                backgroundColor='white'
                 flexDirection='row'
                 alignItems='center'
-                position='absolute'
-                right='5'
-                bottom='3'
+                borderRadius='20'
+                py='10'
+                mb='4'
+                position='relative'
               >
-                <Text color={colors.secondary}>Abu Dhabi</Text>
-                <Text mx='2'>|</Text>
-                <Text color={colors.yellow}>Hotel</Text>
-                <Text mx='2'>|</Text>
-                <Text color={colors.primary}>Family</Text>
+                <Image
+                  size='md'
+                  width='150'
+                  resizeMode='contain'
+                  source={{
+                    uri: item.logo,
+                  }}
+                  alt={'outlet ' + item.name}
+                />
+                <View>
+                  <Text fontSize='lg' style={{ maxWidth: 200 }}>
+                    {item.name}
+                  </Text>
+                  <Text fontSize='sm' color='gray' style={{ maxWidth: 200 }}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  </Text>
+                </View>
+                <Flex
+                  flexDirection='row'
+                  alignItems='center'
+                  position='absolute'
+                  right='5'
+                  bottom='3'
+                >
+                  <Text color={colors.secondary}>Abu Dhabi</Text>
+                  <Text mx='2'>|</Text>
+                  <Text color={colors.yellow}>Hotel</Text>
+                  <Text mx='2'>|</Text>
+                  <Text color={colors.primary}>Family</Text>
+                </Flex>
               </Flex>
-            </Flex>
+            </Pressable>
           )}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}

@@ -5,7 +5,7 @@ import SingleCategoryScreen from '../screens/SingleCategoryScreen';
 import YasalamScreen from '../screens/YasalamScreen';
 import RewardsScreen from '../screens/RewardsScreen';
 import ExperienceScreen from '../screens/ExperienceScreen';
-import OutletYasalamScreen from '../screens/OutletYasalamScreen';
+import SingleOutletScreen from '../screens/SingleOutletScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,7 +20,7 @@ const HomeNavigator = () => {
       <Stack.Screen name='Yasalam' component={YasalamScreen} />
       <Stack.Screen name='Experience' component={ExperienceScreen} />
       <Stack.Screen name='Reward' component={RewardsScreen} />
-      <Stack.Screen name='OutletYasalam' component={OutletYasalamScreen} />
+      <Stack.Screen name='SingleOutlet' component={SingleOutletScreen} />
     </Stack.Navigator>
   );
 };

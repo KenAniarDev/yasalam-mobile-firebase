@@ -34,7 +34,7 @@ const QRScreen = ({ navigation }) => (
       px='4'
       data={data}
       renderItem={({ item }) => (
-        <Flex alignItems='center' m='4'>
+        <Flex justifyContent='center' alignItems='center' m='4'>
           <Text fontSize='3xl' bold>
             My YaSalam
           </Text>
