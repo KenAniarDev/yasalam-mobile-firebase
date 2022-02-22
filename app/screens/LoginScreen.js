@@ -1,17 +1,38 @@
-import React from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import {
   StyleSheet,
-  Text,
   TextInput,
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { useToast, Text } from 'native-base';
 import ScreenWrapper from '../components/ScreenWrapper';
 
 import colors from '../config/colors';
+import baseUrl from '../utility/baseUrl';
 
 function LoginScreen({ navigation }) {
+  const toast = useToast();
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = async () => {
+    try {
+      const result = await axios.post(`${baseUrl}/member/email-login`, {
+        email,
+      });
+      navigation.navigate('OTP', { email });
+    } catch (error) {
+      toast.show({
+        title: 'Error',
+        description: error.response.data,
+        status: 'error',
+        placement: 'top',
+      });
+    }
+  };
+
   return (
     <ScreenWrapper backgroundColor={colors.secondary}>
       <View style={styles.container}>
@@ -23,15 +44,16 @@ function LoginScreen({ navigation }) {
                 style={styles.input}
                 placeholder='Email'
                 placeholderTextColor={colors.white}
-                // onChangeText={handleChange('email')}
-                // onBlur={handleBlur('email')}
-                // value={values.email}
+                onChangeText={(value) => setEmail(value)}
+                value={email}
               />
             </View>
 
             <TouchableOpacity
               // disabled={isSubmitting}
-              onPress={() => navigation.navigate('OTP')}
+              onPress={() => {
+                handleSubmit();
+              }}
             >
               <Text style={styles.loginButton}>LOGIN</Text>
             </TouchableOpacity>

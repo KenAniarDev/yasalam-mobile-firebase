@@ -7,8 +7,10 @@ const useStore = create((set) => ({
   categories: [],
   regions: [],
   features: [],
+  member: null,
   setUser: (user) => set({ user }),
   setHasLaunched: (hasLaunched) => set({ hasLaunched }),
+  setMember: (member) => set({ member }),
   setData: (outlets, categories, regions, features) =>
     set({ outlets, categories, regions, features }),
 }));

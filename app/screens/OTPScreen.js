@@ -1,16 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { useToast, Text } from 'native-base';
 import ScreenWrapper from '../components/ScreenWrapper';
 import colors from '../config/colors';
+import axios from 'axios';
+import baseUrl from '../utility/baseUrl';
+import { MEMBER } from '../utility/constants';
+
+async function setMember(member) {
+  try {
+    await AsyncStorage.setItem(MEMBER, member);
+  } catch (error) {}
+}
 
 const OTPScreen = ({ navigation, route }) => {
+  const toast = useToast();
+  const [email, setEmail] = useState('');
+
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const ref_input1 = useRef();
   const ref_input2 = useRef();
@@ -23,6 +29,41 @@ const OTPScreen = ({ navigation, route }) => {
     setOtp([...otp.map((data, i) => (i === index ? value : data))]);
   };
 
+  const handleSubmit = async () => {
+    if (otp.join('').length < 6) {
+      return toast.show({
+        title: 'Error',
+        description: 'Please complete OTP',
+        status: 'error',
+        placement: 'top',
+      });
+    }
+    try {
+      const result = await axios.post(`${baseUrl}/member/otp-login`, {
+        email,
+        otp: otp.join(''),
+      });
+      setMember(result.data);
+      toast.show({
+        title: 'Sucess  ',
+        description: 'Nice',
+        status: 'success',
+        placement: 'top',
+      });
+      // navigation.navigate('OTP');
+    } catch (error) {
+      console.log(error);
+      toast.show({
+        title: 'Error',
+        description: error.response.data,
+        status: 'error',
+        placement: 'top',
+      });
+    }
+  };
+  useEffect(() => {
+    setEmail(route.params.email);
+  }, []);
   return (
     <ScreenWrapper backgroundColor={colors.yellow}>
       <View style={styles.container}>
@@ -177,7 +218,7 @@ const OTPScreen = ({ navigation, route }) => {
         <TouchableOpacity
           activeOpacity={0.5}
           // onPress={verify}
-          onPress={() => {}}
+          onPress={handleSubmit}
         >
           <Text
             style={{
