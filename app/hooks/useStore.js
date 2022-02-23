@@ -12,7 +12,6 @@ const useStore = create((set) => ({
   setUser: (user) => set({ user }),
   setHasLaunched: (hasLaunched) => set({ hasLaunched }),
   setMember: (member) => set({ member }),
-  setFavorites: (favorites) => set({ favorites }),
   setData: (outlets, categories, regions, features) =>
     set({ outlets, categories, regions, features }),
 }));

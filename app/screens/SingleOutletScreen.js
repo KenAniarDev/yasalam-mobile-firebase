@@ -1,6 +1,6 @@
+import React, { useState, useEffect, useCallback } from 'react';
 import { onSnapshot, doc, collection } from 'firebase/firestore';
 import { db } from '../utility/firebase';
-import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -30,20 +30,24 @@ import {
   getAllFavoritesById,
   deleteFavorite,
 } from '../utility/firebase';
+import axios from 'axios';
+import baseUrl from '../utility/baseUrl';
 
 import haversine from 'haversine-distance';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 const SingleOutletScreen = ({ navigation, route }) => {
   const toast = useToast();
   const member = useStore((state) => state.member);
-  const favorites = useStore((state) => state.favorites);
-  const setFavorites = useStore((state) => state.setFavorites);
-  const [favoritesId, setFavoritesId] = useState([]);
+  const setMember = useStore((state) => state.setMember);
   const currentDate = moment(new Date()).format('YYYY-MM-DD');
   const outlet = route.params.item;
   const [visits, setVisits] = useState(outlet.visits);
   const [location, setLocation] = useState(undefined);
   const [branches, setBranches] = useState([]);
+
+  const [loading, setLoading] = useState(false);
 
   const [webHeight, setWebHeight] = useState(100);
   const webViewScript = `
@@ -63,71 +67,95 @@ const SingleOutletScreen = ({ navigation, route }) => {
       setLocation({ latitude, longitude });
     } catch (error) {}
   };
-
-  const addNewFavorite = async () => {
-    console.log(outlet.id);
-    console.log(favorites);
+  const fetchData = async () => {
     try {
-      await addFavorite(member.id, outlet.id);
-      toast.show({
-        title: 'Success',
-        description: 'Added to favorites',
-        status: 'success',
-        placement: 'top',
+      const result = await axios.post(`${baseUrl}/member/getbyotp`, {
+        email: member.email,
+        otp: member.otp,
       });
-      const favs = await getAllFavoritesById(member.id);
-      setFavorites(favs);
-      setFavoritesId(favs.map((e) => e.outletId));
-    } catch (error) {
-      toast.show({
-        title: 'Error',
-        description: 'Error please try again',
-        status: 'error',
-        placement: 'top',
-      });
-    }
-  };
-  const deleteFavorite = async () => {
-    const index = favorites.findIndex((e) => e.outletId === outlet.id);
-    try {
-      await deleteFavorite(favorites[index].id);
-      const favs = await getAllFavoritesById(member.id);
-      setFavorites(favs);
+      setMember(result.data);
     } catch (error) {
       console.log(error);
       toast.show({
         title: 'Error',
-        description: 'Error please try again',
+        description: error.response.data,
         status: 'error',
         placement: 'top',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    console.log(currentDate);
-    console.log(outlet.currentVisitDate);
-    getLocation();
-
-    const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
-      let data = [];
-      snapshot.docs.forEach((doc) => {
-        if (
-          doc.id !== outlet.id &&
-          doc.data().outletgroupId === outlet.outletgroupId
-        ) {
-          data.push({ ...doc.data(), id: doc.id });
-        } else if (doc.id === outlet.id) {
-          setVisits(doc.data().visits);
-        }
+  const addNewFavorite = async (outletId) => {
+    setLoading(true);
+    try {
+      await axios.post(`${baseUrl}/member/add-favorites`, {
+        email: member.email,
+        otp: member.otp,
+        outletId: outletId,
       });
-      setBranches(data);
-    });
+      console.log('add');
+      fetchData();
+    } catch (error) {
+      toast.show({
+        title: 'Error',
+        description: error.response.data,
+        status: 'error',
+        placement: 'top',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  const deleteFavorite = async (outletId) => {
+    setLoading(true);
+    try {
+      await axios.post(`${baseUrl}/member/delete-favorites`, {
+        email: member.email,
+        otp: member.otp,
+        outletId: outletId,
+      });
+      console.log('add');
+      fetchData();
+    } catch (error) {
+      toast.show({
+        title: 'Error',
+        description: error.response.data,
+        status: 'error',
+        placement: 'top',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return () => {
-      unsubscribe();
-    };
-  }, [favorites]);
+  useFocusEffect(
+    useCallback(() => {
+      getLocation();
+      fetchData();
+      console.log(member.favorites.includes());
+
+      const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
+        let data = [];
+        snapshot.docs.forEach((doc) => {
+          if (
+            doc.id !== outlet.id &&
+            doc.data().outletgroupId === outlet.outletgroupId
+          ) {
+            data.push({ ...doc.data(), id: doc.id });
+          } else if (doc.id === outlet.id) {
+            setVisits(doc.data().visits);
+          }
+        });
+        setBranches(data);
+      });
+      return () => {
+        console.log('unsubscribe yasalam');
+        unsubscribe();
+      };
+    }, [member])
+  );
   return (
     <>
       <ScrollView
@@ -195,8 +223,8 @@ const SingleOutletScreen = ({ navigation, route }) => {
             <Text fontSize='xl' bold mr='2' width='70%'>
               {outlet.name}
             </Text>
-            {favoritesId.includes(outlet.id) ? (
-              <TouchableOpacity onPress={() => deleteFavorite()}>
+            {member.favorites.includes(outlet.id) ? (
+              <TouchableOpacity onPress={() => deleteFavorite(outlet.id)}>
                 <MaterialCommunityIcons
                   // name={isFavorite ? 'heart' : 'heart-outline'}
                   name={'heart'}
@@ -205,7 +233,7 @@ const SingleOutletScreen = ({ navigation, route }) => {
                 />
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity onPress={() => addNewFavorite()}>
+              <TouchableOpacity onPress={() => addNewFavorite(outlet.id)}>
                 <MaterialCommunityIcons
                   // name={isFavorite ? 'heart' : 'heart-outline'}
                   name={'heart-outline'}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { FlatList, Text, Flex, Image, View, Pressable } from 'native-base';
 import ScreenWrapper from '../components/ScreenWrapper';
 import Tabs from '../components/Tabs';
@@ -7,6 +7,7 @@ import colors from '../config/colors';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../utility/firebase';
 import moment from 'moment';
+import { useFocusEffect } from '@react-navigation/native';
 
 const YasalamScreen = ({ navigation }) => {
   const currentDate = moment(new Date()).format('YYYY-MM-DD');
@@ -40,18 +41,41 @@ const YasalamScreen = ({ navigation }) => {
     setFilteredOutlets(filtered);
   };
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
-      let data = [];
-      snapshot.docs.forEach((doc) => {
-        data.push({ ...doc.data(), id: doc.id });
-      });
-      setOutlets(data);
-      setFilteredOutlets(data);
-    });
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
+  //     let data = [];
+  //     snapshot.docs.forEach((doc) => {
+  //       if (doc.data().yasalam) {
+  //         data.push({ ...doc.data(), id: doc.id });
+  //       }
+  //     });
+  //     setOutlets(data);
+  //     setFilteredOutlets(data);
+  //   });
 
-    return () => unsubscribe();
-  }, []);
+  //   return () => {
+  //     console.log('unsubscribe yasalam');
+  //     unsubscribe();
+  //   };
+  // }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
+        let data = [];
+        snapshot.docs.forEach((doc) => {
+          if (doc.data().yasalam) {
+            data.push({ ...doc.data(), id: doc.id });
+          }
+        });
+        setOutlets(data);
+        setFilteredOutlets(data);
+      });
+      return () => {
+        console.log('unsubscribe yasalam');
+        unsubscribe();
+      };
+    }, [])
+  );
   return (
     <ScreenWrapper>
       <Tabs active='yasalam' navigation={navigation} />

@@ -22,7 +22,6 @@ export default function App() {
   const setHasLaunched = useStore((state) => state.setHasLaunched);
   const member = useStore((state) => state.member);
   const setMember = useStore((state) => state.setMember);
-  const setFavorites = useStore((state) => state.setFavorites);
   const [loading, setLoading] = useState(true);
 
   const checIfHasLaunched = async () => {
@@ -41,9 +40,6 @@ export default function App() {
       if (value !== null) {
         setMember(JSON.parse(value));
       }
-
-      const favorites = await getAllFavoritesById(JSON.parse(value).id);
-      setFavorites(favorites);
     } catch (e) {
       setMember(null);
     } finally {
