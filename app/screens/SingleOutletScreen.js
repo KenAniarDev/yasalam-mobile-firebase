@@ -8,7 +8,15 @@ import {
   RefreshControl,
   Touchable,
 } from 'react-native';
-import { Image, Flex, View, Text, FlatList, Pressable } from 'native-base';
+import {
+  Image,
+  Flex,
+  View,
+  Text,
+  FlatList,
+  Pressable,
+  useToast,
+} from 'native-base';
 import * as Linking from 'expo-linking';
 import { SliderBox } from 'react-native-image-slider-box';
 import colors from '../config/colors';
@@ -16,13 +24,24 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { WebView } from 'react-native-webview';
 import moment from 'moment';
 import * as Location from 'expo-location';
+import useStore from '../hooks/useStore';
+import {
+  addFavorite,
+  getAllFavoritesById,
+  deleteFavorite,
+} from '../utility/firebase';
 
 import haversine from 'haversine-distance';
 
 const SingleOutletScreen = ({ navigation, route }) => {
+  const toast = useToast();
+  const member = useStore((state) => state.member);
+  const favorites = useStore((state) => state.favorites);
+  const setFavorites = useStore((state) => state.setFavorites);
+  const [favoritesId, setFavoritesId] = useState([]);
   const currentDate = moment(new Date()).format('YYYY-MM-DD');
   const outlet = route.params.item;
-  const [visits, setVisits] = useState(0);
+  const [visits, setVisits] = useState(outlet.visits);
   const [location, setLocation] = useState(undefined);
   const [branches, setBranches] = useState([]);
 
@@ -45,22 +64,50 @@ const SingleOutletScreen = ({ navigation, route }) => {
     } catch (error) {}
   };
 
-  useEffect(() => {
-    getLocation();
-
-    if (typeof outlet.currentVisitDate !== 'undefined') {
-      if (outlet.currentVisitDate !== currentDate) {
-        setVisits(0);
-      } else {
-        setVisits(outlet.visits);
-      }
-    } else {
-      setVisits(0);
+  const addNewFavorite = async () => {
+    console.log(outlet.id);
+    console.log(favorites);
+    try {
+      await addFavorite(member.id, outlet.id);
+      toast.show({
+        title: 'Success',
+        description: 'Added to favorites',
+        status: 'success',
+        placement: 'top',
+      });
+      const favs = await getAllFavoritesById(member.id);
+      setFavorites(favs);
+      setFavoritesId(favs.map((e) => e.outletId));
+    } catch (error) {
+      toast.show({
+        title: 'Error',
+        description: 'Error please try again',
+        status: 'error',
+        placement: 'top',
+      });
     }
+  };
+  const deleteFavorite = async () => {
+    const index = favorites.findIndex((e) => e.outletId === outlet.id);
+    try {
+      await deleteFavorite(favorites[index].id);
+      const favs = await getAllFavoritesById(member.id);
+      setFavorites(favs);
+    } catch (error) {
+      console.log(error);
+      toast.show({
+        title: 'Error',
+        description: 'Error please try again',
+        status: 'error',
+        placement: 'top',
+      });
+    }
+  };
 
-    const unsub = onSnapshot(doc(db, 'outlets', outlet.id), (doc) => {
-      setVisits(doc.data().visits);
-    });
+  useEffect(() => {
+    console.log(currentDate);
+    console.log(outlet.currentVisitDate);
+    getLocation();
 
     const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
       let data = [];
@@ -70,6 +117,8 @@ const SingleOutletScreen = ({ navigation, route }) => {
           doc.data().outletgroupId === outlet.outletgroupId
         ) {
           data.push({ ...doc.data(), id: doc.id });
+        } else if (doc.id === outlet.id) {
+          setVisits(doc.data().visits);
         }
       });
       setBranches(data);
@@ -77,9 +126,8 @@ const SingleOutletScreen = ({ navigation, route }) => {
 
     return () => {
       unsubscribe();
-      unsub();
     };
-  }, []);
+  }, [favorites]);
   return (
     <>
       <ScrollView
@@ -147,14 +195,25 @@ const SingleOutletScreen = ({ navigation, route }) => {
             <Text fontSize='xl' bold mr='2' width='70%'>
               {outlet.name}
             </Text>
-            <TouchableOpacity onPress={() => {}}>
-              <MaterialCommunityIcons
-                // name={isFavorite ? 'heart' : 'heart-outline'}
-                name={'heart-outline'}
-                size={36}
-                color={colors.secondary}
-              />
-            </TouchableOpacity>
+            {favoritesId.includes(outlet.id) ? (
+              <TouchableOpacity onPress={() => deleteFavorite()}>
+                <MaterialCommunityIcons
+                  // name={isFavorite ? 'heart' : 'heart-outline'}
+                  name={'heart'}
+                  size={36}
+                  color={colors.secondary}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => addNewFavorite()}>
+                <MaterialCommunityIcons
+                  // name={isFavorite ? 'heart' : 'heart-outline'}
+                  name={'heart-outline'}
+                  size={36}
+                  color={colors.secondary}
+                />
+              </TouchableOpacity>
+            )}
           </Flex>
           <Flex width='100%'>
             <Text fontSize='md'>{outlet.address}</Text>
@@ -212,7 +271,7 @@ const SingleOutletScreen = ({ navigation, route }) => {
                       {outlet.currentVisitDate !== currentDate ? (
                         10
                       ) : (
-                        <>{outlet.visits ? 10 - outlet.visits : 10}</>
+                        <>{visits ? 10 - visits : 10}</>
                       )}
                     </>
                   ) : (

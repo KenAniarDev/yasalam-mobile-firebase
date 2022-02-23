@@ -6,16 +6,20 @@ import colors from '../config/colors';
 import axios from 'axios';
 import baseUrl from '../utility/baseUrl';
 import { MEMBER } from '../utility/constants';
-
-async function setMember(member) {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import useStore from '../hooks/useStore';
+async function setMemberLocalStorage(member) {
   try {
-    await AsyncStorage.setItem(MEMBER, member);
-  } catch (error) {}
+    await AsyncStorage.setItem(MEMBER, JSON.stringify(member));
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const OTPScreen = ({ navigation, route }) => {
   const toast = useToast();
   const [email, setEmail] = useState('');
+  const setMember = useStore((state) => state.setMember);
 
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const ref_input1 = useRef();
@@ -44,6 +48,7 @@ const OTPScreen = ({ navigation, route }) => {
         otp: otp.join(''),
       });
       setMember(result.data);
+      setMemberLocalStorage(result.data);
       toast.show({
         title: 'Sucess  ',
         description: 'Nice',

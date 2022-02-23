@@ -35,6 +35,8 @@ export const outletColRef = collection(db, 'outlets');
 export const visitColRef = collection(db, 'visits');
 export const transactionColRef = collection(db, 'transactions');
 export const productColRef = collection(db, 'products');
+export const voucherColRef = collection(db, 'vouchers');
+export const favoriteColRef = collection(db, 'favorites');
 
 export const getCategories = async () => {
   const categories = await getDocs(categoryColRef).then((snapshot) => {
@@ -95,13 +97,16 @@ export const getProducts = async () => {
 
   return categories;
 };
-export const getAllTransactions = async () => {
+export const getAllTransactionsByMemberId = async (memberId) => {
   try {
-    const q = query(transactionColRef, orderBy('createdAt', 'desc'));
+    const q = query(transactionColRef, where('memberId', '==', memberId));
     const members = await getDocs(q).then((snapshot) => {
       let data = [];
       snapshot.docs.forEach((doc) => {
         data.push({ ...doc.data(), id: doc.id });
+      });
+      data = data.sort(function (a, b) {
+        return b.createdAt.toMillis() - a.createdAt.toMillis();
       });
       return data;
     });
@@ -112,20 +117,71 @@ export const getAllTransactions = async () => {
     return new Error('error');
   }
 };
-export const getAllVisits = async () => {
+export const getAllVisitsByMemberId = async (memberId) => {
   try {
-    const q = query(visitColRef, orderBy('createdAt', 'desc'));
-    const members = await getDocs(q).then((snapshot) => {
+    const q = query(visitColRef, where('memberId', '==', memberId));
+    const visits = await getDocs(q).then((snapshot) => {
       let data = [];
       snapshot.docs.forEach((doc) => {
         data.push({ ...doc.data(), id: doc.id });
       });
+      data = data.sort(function (a, b) {
+        return b.createdAt.toMillis() - a.createdAt.toMillis();
+      });
       return data;
     });
 
-    return members;
+    return visits;
   } catch (error) {
     console.log(error);
     return new Error('error');
   }
+};
+export const getAllVouchersById = async (memberId) => {
+  try {
+    const q = query(voucherColRef, where('memberId', '==', memberId));
+    const vouchers = await getDocs(q).then((snapshot) => {
+      let data = [];
+      snapshot.docs.forEach((doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+      });
+      data = data.sort(function (a, b) {
+        return b.createdAt.toMillis() - a.createdAt.toMillis();
+      });
+      return data;
+    });
+
+    return vouchers;
+  } catch (error) {
+    console.log(error);
+    return new Error('error');
+  }
+};
+
+export const addFavorite = async (memberId, outletId) => {
+  addDoc(favoriteColRef, {
+    memberId,
+    outletId,
+  });
+};
+
+export const getAllFavoritesById = async (memberId) => {
+  try {
+    const q = query(favoriteColRef, where('memberId', '==', memberId));
+    const vouchers = await getDocs(q).then((snapshot) => {
+      let data = [];
+      snapshot.docs.forEach((doc) => {
+        data.push({ outletId: doc.data().outletId, id: doc.id });
+      });
+      return data;
+    });
+
+    return vouchers;
+  } catch (error) {
+    console.log(error);
+    return new Error('error');
+  }
+};
+export const deleteFavorite = async (favorite) => {
+  await db.collection('favorites').document(favorite).delete();
 };
