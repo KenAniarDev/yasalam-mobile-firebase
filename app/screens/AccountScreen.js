@@ -76,47 +76,67 @@ const AccountScreen = ({ navigation }) => {
           <TextRow title={'Issued Date'} value={profile.issueDate} />
           <TextRow title={'Expiry Date'} value={profile.expiryDate} />
 
-          <Flex
-            p='4'
-            mb='2'
-            borderRadius='10'
-            flexDirection='row'
-            justifyContent='center'
-            backgroundColor='white'
-          >
-            <Text fontSize='lg'>CHILDREN</Text>
-          </Flex>
+          {profile.userType !== 'individual' && (
+            <>
+              <Flex
+                p='4'
+                mb='2'
+                borderRadius='10'
+                flexDirection='row'
+                justifyContent='center'
+                backgroundColor='white'
+              >
+                <Text fontSize='lg'>CHILDREN</Text>
+              </Flex>
 
-          {profile.children.map((e, i) => (
-            <Flex
-              key={i}
-              p='4'
-              mb='2'
-              borderRadius='10'
-              backgroundColor={
-                e.gender === 'male' ? colors.primary : colors.secondary
-              }
-            >
-              <TextRow title={'Name'} value={e.name} />
-              <TextRow title={'Gender'} value={e.gender} />
-              <TextRow title={'Birthdate'} value={e.birthdate} />
-            </Flex>
-          ))}
+              {profile.children.map((e, i) => (
+                <Flex
+                  key={i}
+                  p='4'
+                  mb='2'
+                  borderRadius='10'
+                  backgroundColor={
+                    e.gender === 'male' ? colors.primary : colors.secondary
+                  }
+                >
+                  <TextRow title={'Name'} value={e.name} />
+                  <TextRow title={'Gender'} value={e.gender} />
+                  <TextRow title={'Birthdate'} value={e.birthdate} />
+                </Flex>
+              ))}
 
-          {profile.children.length < 3 && (
-            <Pressable
-              mt='2'
-              width='100%'
-              p='4'
-              borderRadius='10'
-              backgroundColor={colors.primary}
-              onPress={() => navigation.navigate('AddChild')}
-            >
-              <Text textAlign='center' color='white' fontSize='lg' bold>
-                ADD CHILDREN
-              </Text>
-            </Pressable>
+              {profile.children.length < 3 && (
+                <Pressable
+                  mt='2'
+                  width='100%'
+                  p='4'
+                  borderRadius='10'
+                  backgroundColor={colors.primary}
+                  onPress={() => navigation.navigate('AddChild')}
+                >
+                  <Text textAlign='center' color='white' fontSize='lg' bold>
+                    ADD CHILDREN
+                  </Text>
+                </Pressable>
+              )}
+
+              {!profile.isSecondaryActive && (
+                <Pressable
+                  mt='2'
+                  width='100%'
+                  p='4'
+                  borderRadius='10'
+                  backgroundColor={colors.secondary}
+                  onPress={() => navigation.navigate('AddSpouse')}
+                >
+                  <Text textAlign='center' color='white' fontSize='lg' bold>
+                    ADD SPOUSE
+                  </Text>
+                </Pressable>
+              )}
+            </>
           )}
+
           <View width='100%' height='10'></View>
         </ScrollView>
       )}

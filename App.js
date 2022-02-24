@@ -14,10 +14,8 @@ import AppNavigator from './app/navigation/AppNavigator';
 import AuthNavigator from './app/navigation/AuthNavigator';
 import Loader from './app/components/Loader';
 
-import { getAllFavoritesById } from './app/utility/firebase';
-
 export default function App() {
-  // usePreventScreenCapture();
+  usePreventScreenCapture();
   const hasLaunched = useStore((state) => state.hasLaunched);
   const setHasLaunched = useStore((state) => state.setHasLaunched);
   const member = useStore((state) => state.member);
