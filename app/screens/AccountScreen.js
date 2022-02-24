@@ -76,7 +76,7 @@ const AccountScreen = ({ navigation }) => {
           <TextRow title={'Issued Date'} value={profile.issueDate} />
           <TextRow title={'Expiry Date'} value={profile.expiryDate} />
 
-          {profile.userType !== 'individual' && (
+          {profile.userType === 'family' && (
             <>
               <Flex
                 p='4'

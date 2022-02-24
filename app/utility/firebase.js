@@ -82,7 +82,7 @@ export const getOutlets = async () => {
 export const getOutlet = async (id) => {
   const docRef = doc(db, 'outlets', id);
   const docSnap = await getDoc(docRef);
-  const data = docSnap.data();
+  const data = { ...docSnap.data(), id: docSnap.id };
 
   return data;
 };

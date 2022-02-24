@@ -4,39 +4,6 @@ import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../config/colors';
 
-const data = [
-  {
-    id: 1,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-  {
-    id: 2,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-  {
-    id: 3,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-  {
-    id: 4,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-  {
-    id: 5,
-    name: 'Myles Nunez',
-    image:
-      'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2FRectangle%20364.png?alt=media&token=7eb07970-5057-4f4a-962d-4acb4a667a46',
-  },
-];
-
 const Banner = ({ navigation, title }) => {
   return (
     <View style={styles.banner}>

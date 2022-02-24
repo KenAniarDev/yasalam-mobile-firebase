@@ -1,56 +1,61 @@
+import React, { useState, useCallback } from 'react';
 import ScreenWrapper from '../components/ScreenWrapper';
 import Tabs from '../components/Tabs';
-import { View, Text, ScrollView, Image, Flex } from 'native-base';
-import { RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, Flex, useToast } from 'native-base';
+import { StyleSheet } from 'react-native';
 import colors from '../config/colors';
+import axios from 'axios';
+import baseUrl from '../utility/baseUrl';
+import useStore from '../hooks/useStore';
+import { useFocusEffect } from '@react-navigation/native';
 
 const RewardsScreen = ({ navigation }) => {
-  // const { userData, setUserData } = useAuth();
+  const toast = useToast();
+  const member = useStore((state) => state.member);
+  const setMember = useStore((state) => state.setMember);
+  const [profile, setProfile] = useState(member);
+  const [loading, setLoading] = useState(true);
 
-  // const fetchUser = async () => {
-  //   const config = {
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   };
-  //   try {
-  //     const body = JSON.stringify({
-  //       otp: userData.otp,
-  //       id: userData._id,
-  //     });
-  //     const result = await axios.post(
-  //       `${baseUrl}/api/mobile/user`,
-  //       body,
-  //       config
-  //     );
-  //     setUserData(result.data.data.user);
-  //   } catch (error) {}
-  // };
+  const fetchData = async () => {
+    try {
+      const result = await axios.post(`${baseUrl}/member/getbyotp`, {
+        email: member.email,
+        otp: member.otp,
+      });
+      setProfile(result.data);
+      setMember(result.data);
+    } catch (error) {
+      console.log(error);
+      toast.show({
+        title: 'Error',
+        description: error.response.data,
+        status: 'error',
+        placement: 'top',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // const [refreshing, setRefreshing] = React.useState(false);
-
-  // const onRefresh = React.useCallback(() => {
-  //   setRefreshing(true);
-  //   fetchUser();
-  //   setRefreshing(false);
-  // }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+      return () => {};
+    }, [])
+  );
 
   return (
     <ScreenWrapper>
       <Tabs active='reward' navigation={navigation} />
-      <ScrollView
-      // refreshControl={
-      //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      // }
-      >
-        <View style={styles.container}>
+      <Flex justifyContent='center' height='100%'>
+        <Flex style={styles.container}>
           <View style={styles.card}>
             <Flex justifyContent='space-between' height='100%'>
               <Text fontSize='2xl' bold color={colors.yellow}>
                 Total Points
               </Text>
               <Text fontSize='2xl' color={colors.secondary}>
-                100
+                {profile.points}
               </Text>
             </Flex>
             <Image
@@ -68,7 +73,7 @@ const RewardsScreen = ({ navigation }) => {
                 Total Savings
               </Text>
               <Text fontSize='2xl' color={colors.secondary}>
-                1000 AED
+                {profile.savings} AED
               </Text>
             </Flex>
             <Image
@@ -80,8 +85,8 @@ const RewardsScreen = ({ navigation }) => {
               }}
             ></Image>
           </View>
-        </View>
-      </ScrollView>
+        </Flex>
+      </Flex>
     </ScreenWrapper>
   );
 };
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 200,
+    maxHeight: 200,
     borderRadius: 15,
     backgroundColor: colors.white,
     marginBottom: 40,

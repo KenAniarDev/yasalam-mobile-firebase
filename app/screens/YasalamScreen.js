@@ -8,11 +8,12 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../utility/firebase';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
-
+import useStore from '../hooks/useStore';
 const YasalamScreen = ({ navigation }) => {
+  const setOutlets = useStore((state) => state.setOutlets);
   const currentDate = moment(new Date()).format('YYYY-MM-DD');
 
-  const [outlets, setOutlets] = useState([]);
+  const [yasalamOutlets, setYasalamOutlets] = useState([]);
   const [filteredOutlets, setFilteredOutlets] = useState([]);
 
   const [filterVal, setFilterVal] = useState({
@@ -28,7 +29,7 @@ const YasalamScreen = ({ navigation }) => {
     const regionRegex = new RegExp(`${region}`, 'gi');
     const featureRegex = new RegExp(`${feature}`, 'gi');
 
-    const filtered = outlets.filter((val) => {
+    const filtered = yasalamOutlets.filter((val) => {
       if (
         val.name.match(searchTextRegex) &&
         val.categoryId.match(categoryRegex) &&
@@ -60,18 +61,22 @@ const YasalamScreen = ({ navigation }) => {
   // }, []);
   useFocusEffect(
     useCallback(() => {
+      console.log('execute');
       const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
         let data = [];
+        let alldata = [];
         snapshot.docs.forEach((doc) => {
           if (doc.data().yasalam) {
             data.push({ ...doc.data(), id: doc.id });
           }
+          alldata.push({ ...doc.data(), id: doc.id });
         });
-        setOutlets(data);
+        setOutlets(alldata);
+        setYasalamOutlets(data);
         setFilteredOutlets(data);
       });
       return () => {
-        console.log('unsubscribe yasalam');
+        console.log('unsubscribe yasalam dsaasd');
         unsubscribe();
       };
     }, [])
@@ -89,7 +94,7 @@ const YasalamScreen = ({ navigation }) => {
           px='4'
           width='100%'
           data={filteredOutlets}
-          extraData={outlets}
+          extraData={yasalamOutlets}
           renderItem={({ item }) => (
             <Pressable
               onPress={() => navigation.navigate('SingleOutlet', { item })}

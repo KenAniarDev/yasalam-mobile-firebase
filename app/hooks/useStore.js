@@ -12,6 +12,7 @@ const useStore = create((set) => ({
   setUser: (user) => set({ user }),
   setHasLaunched: (hasLaunched) => set({ hasLaunched }),
   setMember: (member) => set({ member }),
+  setOutlets: (outlets) => set({ outlets }),
   setData: (outlets, categories, regions, features) =>
     set({ outlets, categories, regions, features }),
 }));

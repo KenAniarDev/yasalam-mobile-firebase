@@ -44,7 +44,7 @@ function LoginScreen({ navigation }) {
                 style={styles.input}
                 placeholder='Email'
                 placeholderTextColor={colors.white}
-                onChangeText={(value) => setEmail(value)}
+                onChangeText={(value) => setEmail(value.toLocaleLowerCase())}
                 value={email}
               />
             </View>
@@ -88,13 +88,13 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textTransform: 'uppercase',
     fontWeight: 'bold',
-    paddingVertical: 20,
-    paddingHorizontal: 60,
     borderRadius: 60,
     borderWidth: 2,
     borderColor: colors.white,
     width: '100%',
     textAlign: 'center',
+    paddingTop: 30,
+    paddingVertical: 18,
   },
   loginButton: {
     marginTop: 50,

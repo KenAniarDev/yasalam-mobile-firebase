@@ -21,7 +21,7 @@ const AuthNavigator = () => (
     <Stack.Screen
       name='Register'
       component={RegisterScreen}
-      options={{ headerShown: true }}
+      // options={{ headerShown: true }}
     />
     <Stack.Screen name='OTP' component={OTPScreen} />
   </Stack.Navigator>

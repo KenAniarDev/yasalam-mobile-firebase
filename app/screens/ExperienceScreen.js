@@ -39,7 +39,9 @@ const ExperienceScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+    console.log('exp');
     const experience = outlets.filter((e) => e.experience);
+    console.log(outlets[0].experience);
     setExperienceOutlets(experience);
     setFilteredOutlets(experience);
   }, [outlets]);

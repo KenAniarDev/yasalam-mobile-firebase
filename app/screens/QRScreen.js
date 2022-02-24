@@ -16,10 +16,15 @@ const QRScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
+    console.log(member);
     try {
       const result = await axios.post(`${baseUrl}/member/getbyotp`, {
-        email: member.email,
-        otp: member.otp,
+        email:
+          member.userType === 'secondary'
+            ? member.mainAccountEmail
+            : member.email,
+        otp:
+          member.userType === 'secondary' ? member.mainAccountOTP : member.otp,
       });
       if (member.userType === 'individual') {
         setQrCodes([
@@ -29,6 +34,38 @@ const QRScreen = ({ navigation }) => {
             birthdate: result.data.birthdate,
           },
         ]);
+      } else if (member.userType === 'family') {
+        const family = [];
+        family.push({
+          name: result.data.name,
+          id: result.data.id,
+          birthdate: result.data.birthdate,
+        });
+
+        result.data.children.forEach((child) => {
+          family.push({
+            name: child.name,
+            id: result.data.id,
+            birthdate: child.birthdate,
+          });
+        });
+        setQrCodes(family);
+      } else {
+        const family = [];
+        family.push({
+          name: member.name,
+          id: member.id,
+          birthdate: member.birthdate,
+        });
+
+        result.data.children.forEach((child) => {
+          family.push({
+            name: child.name,
+            id: result.data.id,
+            birthdate: child.birthdate,
+          });
+        });
+        setQrCodes(family);
       }
     } catch (error) {
       console.log(error);
@@ -53,7 +90,7 @@ const QRScreen = ({ navigation }) => {
       {loading ? (
         <Loader />
       ) : (
-        <Flex justifyContent='center' alignItems='center'>
+        <Flex justifyContent='center' alignItems='center' height='100%'>
           <FlatList
             nestedScrollEnabled={true}
             px='4'
@@ -76,7 +113,7 @@ const QRScreen = ({ navigation }) => {
                     alt={'qr'}
                   />
                   <View position='absolute' style={{ top: 50, left: 53 }}>
-                    <QRCode value={'id'} size={200} />
+                    <QRCode value={item.id} size={200} />
                   </View>
                 </View>
                 <View
@@ -87,10 +124,10 @@ const QRScreen = ({ navigation }) => {
                   borderRadius='26'
                 >
                   <Flex flexDirection='row' justifyContent='space-between'>
-                    <Text fontSize='md' color='gray.500'>
+                    <Text fontSize='sm' color='gray.500'>
                       Name
                     </Text>
-                    <Text fontSize='md' bold color={colors.secondary}>
+                    <Text fontSize='sm' bold color={colors.secondary}>
                       {item.name}
                     </Text>
                   </Flex>
@@ -99,25 +136,25 @@ const QRScreen = ({ navigation }) => {
                     justifyContent='space-between'
                     my='2'
                   >
-                    <Text fontSize='md' color='gray.500'>
+                    <Text fontSize='sm' color='gray.500'>
                       Birthday
                     </Text>
-                    <Text fontSize='md' bold color={colors.yellow}>
+                    <Text fontSize='sm' bold color={colors.yellow}>
                       {item.birthdate}
                     </Text>
                   </Flex>
                   <Flex flexDirection='row' justifyContent='space-between'>
-                    <Text fontSize='md' color='gray.500'>
+                    <Text fontSize='sm' color='gray.500'>
                       Expiry
                     </Text>
-                    <Text fontSize='md' bold color={colors.primary}>
+                    <Text fontSize='sm' bold color={colors.primary}>
                       {member.expiryDate}
                     </Text>
                   </Flex>
                 </View>
               </Flex>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id + item.birthdate}
             horizontal
             showsHorizontalScrollIndicator={false}
             // refreshing={refreshing}

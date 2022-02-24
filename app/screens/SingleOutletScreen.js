@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { onSnapshot, doc, collection } from 'firebase/firestore';
-import { db } from '../utility/firebase';
+import { getOutlet, getOutlets } from '../utility/firebase';
 import {
   StyleSheet,
   ScrollView,
@@ -25,11 +25,6 @@ import { WebView } from 'react-native-webview';
 import moment from 'moment';
 import * as Location from 'expo-location';
 import useStore from '../hooks/useStore';
-import {
-  addFavorite,
-  getAllFavoritesById,
-  deleteFavorite,
-} from '../utility/firebase';
 import axios from 'axios';
 import baseUrl from '../utility/baseUrl';
 
@@ -41,11 +36,13 @@ const SingleOutletScreen = ({ navigation, route }) => {
   const toast = useToast();
   const member = useStore((state) => state.member);
   const setMember = useStore((state) => state.setMember);
+  const setOutlets = useStore((state) => state.setOutlets);
   const currentDate = moment(new Date()).format('YYYY-MM-DD');
-  const outlet = route.params.item;
+  const [outlet, setOutlet] = useState(route.params.item);
   const [visits, setVisits] = useState(outlet.visits);
   const [location, setLocation] = useState(undefined);
   const [branches, setBranches] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -68,12 +65,27 @@ const SingleOutletScreen = ({ navigation, route }) => {
     } catch (error) {}
   };
   const fetchData = async () => {
+    console.log('fetchin');
     try {
       const result = await axios.post(`${baseUrl}/member/getbyotp`, {
         email: member.email,
         otp: member.otp,
       });
       setMember(result.data);
+      const latestOutlet = await getOutlet(route.params.item.id);
+      setOutlet(latestOutlet);
+      setVisits(latestOutlet.visits);
+
+      const latestOutlets = await getOutlets();
+      setOutlets(latestOutlets);
+
+      if (outlet.outletgroupName !== 'Single') {
+        console.log('sda');
+        const branches = latestOutlets.filter(
+          (e) => e.outletgroupId === outlet.outletgroupId && e.id !== outlet.id
+        );
+        setBranches(branches);
+      }
     } catch (error) {
       console.log(error);
       toast.show({
@@ -130,40 +142,28 @@ const SingleOutletScreen = ({ navigation, route }) => {
     }
   };
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+    setRefreshing(false);
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
+      console.log('runnin');
       getLocation();
       fetchData();
-      console.log(member.favorites.includes());
-
-      const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
-        let data = [];
-        snapshot.docs.forEach((doc) => {
-          if (
-            doc.id !== outlet.id &&
-            doc.data().outletgroupId === outlet.outletgroupId
-          ) {
-            data.push({ ...doc.data(), id: doc.id });
-          } else if (doc.id === outlet.id) {
-            setVisits(doc.data().visits);
-          }
-        });
-        setBranches(data);
-      });
-      return () => {
-        console.log('unsubscribe yasalam');
-        unsubscribe();
-      };
-    }, [member])
+      return () => {};
+    }, [])
   );
   return (
     <>
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
-        // refreshControl={
-        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        // }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <SliderBox images={outlet.gallery} style={{ height: 250 }} />
         <View p='4'>
