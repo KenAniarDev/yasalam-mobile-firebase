@@ -67,7 +67,7 @@ const SingleOutletScreen = ({ navigation, route }) => {
   const fetchData = async () => {
     console.log('fetchin');
     try {
-      const result = await axios.post(`${baseUrl}/member/getbyotp`, {
+      const result = await axios.post(`${baseUrl}/member/get-by-email-otp`, {
         email: member.email,
         otp: member.otp,
       });
@@ -102,7 +102,7 @@ const SingleOutletScreen = ({ navigation, route }) => {
   const addNewFavorite = async (outletId) => {
     setLoading(true);
     try {
-      await axios.post(`${baseUrl}/member/add-favorites`, {
+      await axios.post(`${baseUrl}/member/add-favorite`, {
         email: member.email,
         otp: member.otp,
         outletId: outletId,
@@ -123,7 +123,7 @@ const SingleOutletScreen = ({ navigation, route }) => {
   const deleteFavorite = async (outletId) => {
     setLoading(true);
     try {
-      await axios.post(`${baseUrl}/member/delete-favorites`, {
+      await axios.post(`${baseUrl}/member/delete-favorite`, {
         email: member.email,
         otp: member.otp,
         outletId: outletId,
@@ -495,7 +495,7 @@ const SingleOutletScreen = ({ navigation, route }) => {
                 Branches
               </Text>
               {branches.map((item) => (
-                <TouchableOpacity
+                <Pressable
                   key={item.id}
                   onPress={() => navigation.navigate('SingleOutlet', { item })}
                 >
@@ -605,7 +605,7 @@ const SingleOutletScreen = ({ navigation, route }) => {
                       </Flex>
                     </Flex>
                   </Flex>
-                </TouchableOpacity>
+                </Pressable>
               ))}
             </>
           ) : (

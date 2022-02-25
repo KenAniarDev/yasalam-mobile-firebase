@@ -18,7 +18,7 @@ const QRScreen = ({ navigation }) => {
   const fetchData = async () => {
     console.log(member);
     try {
-      const result = await axios.post(`${baseUrl}/member/getbyotp`, {
+      const result = await axios.post(`${baseUrl}/member/get-by-email-otp`, {
         email:
           member.userType === 'secondary'
             ? member.mainAccountEmail

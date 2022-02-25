@@ -16,10 +16,12 @@ import baseUrl from '../utility/baseUrl';
 function LoginScreen({ navigation }) {
   const toast = useToast();
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     try {
-      const result = await axios.post(`${baseUrl}/member/email-login`, {
+      const result = await axios.post(`${baseUrl}/member/check-email-login`, {
         email,
       });
       navigation.navigate('OTP', { email });
@@ -30,6 +32,8 @@ function LoginScreen({ navigation }) {
         status: 'error',
         placement: 'top',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -50,7 +54,7 @@ function LoginScreen({ navigation }) {
             </View>
 
             <TouchableOpacity
-              // disabled={isSubmitting}
+              disabled={isSubmitting}
               onPress={() => {
                 handleSubmit();
               }}

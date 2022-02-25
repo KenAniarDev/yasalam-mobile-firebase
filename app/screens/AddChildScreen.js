@@ -97,7 +97,7 @@ function AddChildScreen({ navigation, route }) {
     console.log('age', getAge(birthdate));
     setLoading(true);
     try {
-      await axios.post(`${baseUrl}/member/create-child`, {
+      await axios.post(`${baseUrl}/member/add-child`, {
         email: member.email,
         otp: member.otp,
         name,

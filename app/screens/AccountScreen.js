@@ -32,7 +32,7 @@ const AccountScreen = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const result = await axios.post(`${baseUrl}/member/getbyotp`, {
+      const result = await axios.post(`${baseUrl}/member/get-by-email-otp`, {
         email: member.email,
         otp: member.otp,
       });

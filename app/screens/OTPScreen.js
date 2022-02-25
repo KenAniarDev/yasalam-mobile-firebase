@@ -20,6 +20,7 @@ const OTPScreen = ({ navigation, route }) => {
   const toast = useToast();
   const [email, setEmail] = useState('');
   const setMember = useStore((state) => state.setMember);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const ref_input1 = useRef();
@@ -34,6 +35,7 @@ const OTPScreen = ({ navigation, route }) => {
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     if (otp.join('').length < 6) {
       return toast.show({
         title: 'Error',
@@ -64,6 +66,8 @@ const OTPScreen = ({ navigation, route }) => {
         status: 'error',
         placement: 'top',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   useEffect(() => {
@@ -221,6 +225,7 @@ const OTPScreen = ({ navigation, route }) => {
           </View>
         </View>
         <TouchableOpacity
+          disabled={isSubmitting}
           activeOpacity={0.5}
           // onPress={verify}
           onPress={handleSubmit}

@@ -113,7 +113,6 @@ export const getAllTransactionsByMemberId = async (memberId) => {
 
     return members;
   } catch (error) {
-    console.log(error);
     return new Error('error');
   }
 };
@@ -133,7 +132,6 @@ export const getAllVisitsByMemberId = async (memberId) => {
 
     return visits;
   } catch (error) {
-    console.log(error);
     return new Error('error');
   }
 };
@@ -153,7 +151,6 @@ export const getAllVouchersById = async (memberId) => {
 
     return vouchers;
   } catch (error) {
-    console.log(error);
     return new Error('error');
   }
 };
@@ -178,7 +175,6 @@ export const getAllFavoritesById = async (memberId) => {
 
     return vouchers;
   } catch (error) {
-    console.log(error);
     return new Error('error');
   }
 };
