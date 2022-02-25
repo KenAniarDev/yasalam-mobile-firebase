@@ -25,7 +25,6 @@ const RewardsScreen = ({ navigation }) => {
       setProfile(result.data);
       setMember(result.data);
     } catch (error) {
-      console.log(error);
       toast.show({
         title: 'Error',
         description: error.response.data,

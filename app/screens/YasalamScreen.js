@@ -42,26 +42,8 @@ const YasalamScreen = ({ navigation }) => {
     setFilteredOutlets(filtered);
   };
 
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
-  //     let data = [];
-  //     snapshot.docs.forEach((doc) => {
-  //       if (doc.data().yasalam) {
-  //         data.push({ ...doc.data(), id: doc.id });
-  //       }
-  //     });
-  //     setOutlets(data);
-  //     setFilteredOutlets(data);
-  //   });
-
-  //   return () => {
-  //     console.log('unsubscribe yasalam');
-  //     unsubscribe();
-  //   };
-  // }, []);
   useFocusEffect(
     useCallback(() => {
-      console.log('execute');
       const unsubscribe = onSnapshot(collection(db, 'outlets'), (snapshot) => {
         let data = [];
         let alldata = [];
@@ -76,7 +58,6 @@ const YasalamScreen = ({ navigation }) => {
         setFilteredOutlets(data);
       });
       return () => {
-        console.log('unsubscribe yasalam dsaasd');
         unsubscribe();
       };
     }, [])

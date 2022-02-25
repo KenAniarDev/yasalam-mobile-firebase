@@ -19,7 +19,6 @@ const VisitsScreen = ({ navigation }) => {
     try {
       const visitsDB = await getAllVisitsByMemberId(member.id);
       setVisits(visitsDB);
-      console.log(visitsDB);
     } catch (error) {
       toast.show({
         title: 'Error',

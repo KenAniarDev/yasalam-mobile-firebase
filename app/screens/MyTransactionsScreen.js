@@ -35,7 +35,6 @@ const MyTransactionsScreen = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('runnin transactions');
       fetchData();
 
       return () => setTransactions([]);

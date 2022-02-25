@@ -91,10 +91,7 @@ function AddChildScreen({ navigation, route }) {
       });
       return;
     }
-    console.log('name', name);
-    console.log('gender', gender);
-    console.log('birthdate', moment(birthdate).format('YYYY-MM-DD'));
-    console.log('age', getAge(birthdate));
+
     setLoading(true);
     try {
       await axios.post(`${baseUrl}/member/add-child`, {
@@ -108,7 +105,6 @@ function AddChildScreen({ navigation, route }) {
 
       navigation.goBack();
     } catch (error) {
-      console.log(error);
       toast.show({
         title: 'Error',
         description: error.response.data,

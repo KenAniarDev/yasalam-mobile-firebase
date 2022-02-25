@@ -11,9 +11,7 @@ import useStore from '../hooks/useStore';
 async function setMemberLocalStorage(member) {
   try {
     await AsyncStorage.setItem(MEMBER, JSON.stringify(member));
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 const OTPScreen = ({ navigation, route }) => {
@@ -59,7 +57,6 @@ const OTPScreen = ({ navigation, route }) => {
       });
       // navigation.navigate('OTP');
     } catch (error) {
-      console.log(error);
       toast.show({
         title: 'Error',
         description: error.response.data,

@@ -65,7 +65,6 @@ const SingleOutletScreen = ({ navigation, route }) => {
     } catch (error) {}
   };
   const fetchData = async () => {
-    console.log('fetchin');
     try {
       const result = await axios.post(`${baseUrl}/member/get-by-email-otp`, {
         email: member.email,
@@ -80,14 +79,12 @@ const SingleOutletScreen = ({ navigation, route }) => {
       setOutlets(latestOutlets);
 
       if (outlet.outletgroupName !== 'Single') {
-        console.log('sda');
         const branches = latestOutlets.filter(
           (e) => e.outletgroupId === outlet.outletgroupId && e.id !== outlet.id
         );
         setBranches(branches);
       }
     } catch (error) {
-      console.log(error);
       toast.show({
         title: 'Error',
         description: error.response.data,
@@ -107,7 +104,6 @@ const SingleOutletScreen = ({ navigation, route }) => {
         otp: member.otp,
         outletId: outletId,
       });
-      console.log('add');
       fetchData();
     } catch (error) {
       toast.show({
@@ -128,7 +124,6 @@ const SingleOutletScreen = ({ navigation, route }) => {
         otp: member.otp,
         outletId: outletId,
       });
-      console.log('add');
       fetchData();
     } catch (error) {
       toast.show({
@@ -150,7 +145,6 @@ const SingleOutletScreen = ({ navigation, route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log('runnin');
       getLocation();
       fetchData();
       return () => {};

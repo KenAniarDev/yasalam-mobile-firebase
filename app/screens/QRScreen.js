@@ -16,7 +16,6 @@ const QRScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
-    console.log(member);
     try {
       const result = await axios.post(`${baseUrl}/member/get-by-email-otp`, {
         email:
@@ -68,7 +67,6 @@ const QRScreen = ({ navigation }) => {
         setQrCodes(family);
       }
     } catch (error) {
-      console.log(error);
       toast.show({
         title: 'Error',
         description: error.response.data,

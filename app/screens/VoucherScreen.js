@@ -27,7 +27,6 @@ const VoucherScreen = ({ navigation }) => {
       const vouchersDB = await getAllVouchersById(member.id);
       setVouchers(vouchersDB);
     } catch (error) {
-      console.log(error);
       toast.show({
         title: 'Error',
         description: 'Error please try again',

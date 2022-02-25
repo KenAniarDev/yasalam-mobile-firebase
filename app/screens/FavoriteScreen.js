@@ -33,7 +33,6 @@ const FavoriteScreen = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(member.favorites.length);
       fetchData();
       const favs = outlets.filter((e) => member.favorites.includes(e.id));
       setFavoriteOutlets(favs);

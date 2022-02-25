@@ -28,7 +28,6 @@ const ShopScreen = ({ navigation }) => {
       const productsDB = await getProducts();
       setProducts(productsDB);
     } catch (error) {
-      console.log(error);
       toast.show({
         title: 'Error',
         description: 'Error please try again',
@@ -45,7 +44,6 @@ const ShopScreen = ({ navigation }) => {
         otp: member.otp,
         product: product,
       });
-      console.log('bought');
       fetchData();
       toast.show({
         title: 'Success',

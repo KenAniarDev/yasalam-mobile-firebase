@@ -36,10 +36,8 @@ const HomeScreen = ({ navigation }) => {
   };
   useEffect(() => {
     if (outlets.length === 0) {
-      console.log('fetchData');
       fetchData();
     } else {
-      console.log('useEffect');
       setLoading(false);
     }
     const hotels = outlets.filter(
