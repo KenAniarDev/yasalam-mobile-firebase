@@ -172,7 +172,7 @@ const AppNavigator = () => {
                       <MaterialCommunityIcons
                         name='facebook'
                         size={28}
-                        color={colors}
+                        color={color}
                       />
                     )}
                     onPress={() =>
@@ -188,7 +188,7 @@ const AppNavigator = () => {
                       <MaterialCommunityIcons
                         name='web'
                         size={28}
-                        color={colors}
+                        color={color}
                       />
                     )}
                     onPress={() =>
