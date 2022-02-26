@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, Alert, Image } from 'react-native';
+import { Text, StyleSheet, Alert, View } from 'react-native';
 import { MEMBER } from '../utility/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useStore from '../hooks/useStore';
 import moment from 'moment';
 import axios from 'axios';
 import baseUrl from '../utility/baseUrl';
+import colors from '../config/colors';
+import * as Linking from 'expo-linking';
+import {
+  Ionicons,
+  FontAwesome,
+  FontAwesome5,
+  Entypo,
+  MaterialIcons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 
 import {
   createDrawerNavigator,
@@ -70,6 +80,9 @@ const AppNavigator = () => {
           initialRouteName='Home'
           screenOptions={{
             headerShown: false,
+            drawerActiveBackgroundColor: '#17B9CF',
+            drawerActiveTintColor: 'white',
+            drawerLabelStyle: { marginLeft: -25 },
             // headerBackground: () => (
             //   <Image
             //     style={StyleSheet.absoluteFill}
@@ -83,32 +96,128 @@ const AppNavigator = () => {
           }}
           drawerContent={(props) => {
             return (
-              <DrawerContentScrollView {...props}>
-                <DrawerItemList {...props} />
-                {/* <DrawerItem label="Logout" onPress={() => {
-              Alert.alert(
-                "LOGOUT WARNING",
-                "Are you sure you want to Logout? Once you logout you have to contact the administrator to get your new OTP",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => {},
-                    style: "cancel"
-                  },
-                  { text: "OK", onPress: () => logOut() }
-                ]
-              )
-            }} /> */}
-              </DrawerContentScrollView>
+              <View style={{ flex: 1, backgroundColor: colors.yellow }}>
+                <DrawerContentScrollView {...props}>
+                  <View style={{ flex: 1 }}>
+                    <DrawerItemList {...props} />
+                  </View>
+                  <DrawerItem
+                    label='Contact Us'
+                    labelStyle={{ marginLeft: -25 }}
+                    icon={({ focused, color, size }) => (
+                      <MaterialIcons
+                        name='contact-phone'
+                        size={24}
+                        color={color}
+                      />
+                    )}
+                    onPress={() =>
+                      Linking.openURL('https://yasalamae.ae/contact-us')
+                    }
+                  />
+                  <DrawerItem
+                    label='Terms and Condition'
+                    labelStyle={{ marginLeft: -25 }}
+                    icon={({ focused, color, size }) => (
+                      <Ionicons
+                        name='newspaper-sharp'
+                        size={24}
+                        color={color}
+                      />
+                    )}
+                    onPress={() =>
+                      Linking.openURL('https://yasalamae.ae/terms')
+                    }
+                  />
+                  <DrawerItem
+                    label='Privacy Policy'
+                    labelStyle={{ marginLeft: -25 }}
+                    icon={({ focused, color, size }) => (
+                      <MaterialIcons name='policy' size={24} color={color} />
+                    )}
+                    onPress={() =>
+                      Linking.openURL('https://yasalamae.ae/privacy')
+                    }
+                  />
+                  <DrawerItem
+                    label='FAQs'
+                    labelStyle={{ marginLeft: -25 }}
+                    icon={({ focused, color, size }) => (
+                      <MaterialCommunityIcons
+                        name='head-question-outline'
+                        size={24}
+                        color={color}
+                      />
+                    )}
+                    onPress={() => Linking.openURL('https://yasalamae.ae/faqs')}
+                  />
+                  <DrawerItem
+                    label='Instagram'
+                    labelStyle={{ marginLeft: -25 }}
+                    icon={({ focused, color, size }) => (
+                      <MaterialCommunityIcons
+                        name='instagram'
+                        size={28}
+                        color={color}
+                      />
+                    )}
+                    onPress={() =>
+                      Linking.openURL('https://www.instagram.com/yasalamuae/')
+                    }
+                  />
+                  <DrawerItem
+                    label='Facebook'
+                    labelStyle={{ marginLeft: -25 }}
+                    icon={({ focused, color, size }) => (
+                      <MaterialCommunityIcons
+                        name='facebook'
+                        size={28}
+                        color={colors}
+                      />
+                    )}
+                    onPress={() =>
+                      Linking.openURL(
+                        'https://www.facebook.com/YaSalam-UAE-100492529092540/'
+                      )
+                    }
+                  />
+                  <DrawerItem
+                    label='Website'
+                    labelStyle={{ marginLeft: -25 }}
+                    icon={({ focused, color, size }) => (
+                      <MaterialCommunityIcons
+                        name='web'
+                        size={28}
+                        color={colors}
+                      />
+                    )}
+                    onPress={() =>
+                      Linking.openURL('https://www.tiktok.com/@yasalamuae')
+                    }
+                  />
+                </DrawerContentScrollView>
+              </View>
             );
           }}
         >
-          <Drawer.Screen name='Home' component={TabNavigator} />
+          <Drawer.Screen
+            name='Home'
+            component={TabNavigator}
+            options={{
+              headerTitle: () => <Text style={styles.headerTitle}>Home</Text>,
+              drawerIcon: ({ color }) => (
+                <Ionicons name='ios-home-outline' size={24} color={color} />
+              ),
+            }}
+          />
           <Drawer.Screen
             name='Transactions'
             options={{
               headerTitle: () => (
                 <Text style={styles.headerTitle}>My Transactions</Text>
+              ),
+              drawerIcon: ({ color }) => (
+                <FontAwesome name='money' size={24} color={color} />
               ),
             }}
             component={MyTransactionsScreen}
@@ -119,6 +228,9 @@ const AppNavigator = () => {
               headerTitle: () => (
                 <Text style={styles.headerTitle}>My Visits</Text>
               ),
+              drawerIcon: ({ color }) => (
+                <FontAwesome5 name='person-booth' size={24} color={color} />
+              ),
             }}
             component={VisitsScreen}
           />
@@ -128,6 +240,9 @@ const AppNavigator = () => {
               headerTitle: () => (
                 <Text style={styles.headerTitle}>My Favorite</Text>
               ),
+              drawerIcon: ({ color }) => (
+                <FontAwesome name='heart' size={24} color={color} />
+              ),
             }}
             component={FavoriteScreen}
           />
@@ -135,6 +250,9 @@ const AppNavigator = () => {
             name='Shop'
             options={{
               headerTitle: () => <Text style={styles.headerTitle}>Shop</Text>,
+              drawerIcon: ({ color }) => (
+                <Entypo name='shop' size={24} color={color} />
+              ),
             }}
             component={ShopScreen}
           />
@@ -143,6 +261,9 @@ const AppNavigator = () => {
             options={{
               headerTitle: () => (
                 <Text style={styles.headerTitle}>Voucher</Text>
+              ),
+              drawerIcon: ({ color }) => (
+                <FontAwesome5 name='ticket-alt' size={24} color={color} />
               ),
             }}
             component={VoucherScreen}
@@ -153,18 +274,24 @@ const AppNavigator = () => {
               headerTitle: () => (
                 <Text style={styles.headerTitle}>Profile</Text>
               ),
+              drawerIcon: ({ color }) => (
+                <FontAwesome5 name='user-circle' size={24} color={color} />
+              ),
             }}
             component={AccountNavigator}
           />
-          <Drawer.Screen
+          {/* <Drawer.Screen
             name='Notifications'
             options={{
               headerTitle: () => (
                 <Text style={styles.headerTitle}>My Notifications</Text>
               ),
+              drawerIcon: ({ color }) => (
+                <Ionicons name='ios-home-outline' size={24} color={color} />
+              ),
             }}
             component={NotificationScreen}
-          />
+          /> */}
         </Drawer.Navigator>
       )}
     </>
@@ -174,6 +301,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 18,
     textTransform: 'uppercase',
   },
 });
