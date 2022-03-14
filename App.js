@@ -15,7 +15,7 @@ import AuthNavigator from './app/navigation/AuthNavigator';
 import Loader from './app/components/Loader';
 
 export default function App() {
-  // usePreventScreenCapture();
+  usePreventScreenCapture();
   const hasLaunched = useStore((state) => state.hasLaunched);
   const setHasLaunched = useStore((state) => state.setHasLaunched);
   const member = useStore((state) => state.member);
