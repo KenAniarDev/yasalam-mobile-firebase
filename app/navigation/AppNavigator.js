@@ -80,8 +80,8 @@ const AppNavigator = () => {
           initialRouteName='Home'
           screenOptions={{
             headerShown: false,
-            drawerActiveBackgroundColor: '#17B9CF',
-            drawerActiveTintColor: 'white',
+            drawerActiveBackgroundColor: 'white',
+            drawerActiveTintColor: colors.primary,
             drawerLabelStyle: { marginLeft: -25 },
             // headerBackground: () => (
             //   <Image

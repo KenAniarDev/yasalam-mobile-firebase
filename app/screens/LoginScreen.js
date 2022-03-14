@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   coloredText: {
-    color: colors.yellow,
+    color: colors.white,
     fontWeight: 'bold',
     marginLeft: 5,
   },

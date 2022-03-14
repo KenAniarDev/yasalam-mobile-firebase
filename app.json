@@ -7,9 +7,9 @@
     "orientation": "portrait",
     "icon": "./app/assets/yasalam-logo-square.png",
     "splash": {
-      "image": "./app/assets/splash.png",
+      "image": "./app/assets/splash.jpg",
       "resizeMode": "cover",
-      "backgroundColor": "#e63c4b"
+      "backgroundColor": "#D25235"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

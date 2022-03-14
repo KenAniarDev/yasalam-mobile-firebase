@@ -13,7 +13,7 @@ export default function CustomHeader({ navigation, title }) {
         //   uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fheader.jpg?alt=media&token=29a3d0b6-50ef-42c3-8f47-f109bcf9d91d',
         // }}
         source={{
-          uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fbg-header.png?alt=media&token=990ba0e5-7751-4439-b401-257b55d0eeaf',
+          uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Flanding.jpg?alt=media&token=58f22a66-27e1-4df2-b183-7190a5beffa2',
         }}
         alt='Banner Image'
       />

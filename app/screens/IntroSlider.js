@@ -56,8 +56,8 @@ export default IntroSlider;
 
 const styles = StyleSheet.create({
   introImageStyle: {
-    width: 200,
-    height: 200,
+    width: 400,
+    height: 400,
     resizeMode: 'contain',
   },
   introTextStyle: {
@@ -73,18 +73,18 @@ const slides = [
     key: 's1',
     text: 'Ya Salam is here  to help you find the perfect spot in any gym close to you!',
     image: require('../assets/slide/slide1.png'),
-    backgroundColor: '#3ECEE1',
+    backgroundColor: '#D25235',
   },
   {
     key: 's2',
     text: 'You are one  click away from SAVING MONEY and earning great DISCOUNTS ',
     image: require('../assets/slide/slide2.png'),
-    backgroundColor: '#3ECEE1',
+    backgroundColor: '#D25235',
   },
   {
     key: 's3',
     text: 'Sign up and start training!',
     image: require('../assets/slide/slide3.png'),
-    backgroundColor: '#3ECEE1',
+    backgroundColor: '#D25235',
   },
 ];

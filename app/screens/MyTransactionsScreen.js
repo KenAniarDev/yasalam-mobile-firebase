@@ -98,7 +98,7 @@ const MyTransactionsScreen = ({ navigation }) => {
                   bottom='3'
                 >
                   <Text fontSize='md' color='coolGray.600' bold>
-                    Total Price :
+                    Total Price :{' '}
                   </Text>
                   <Text fontSize='md' color={colors.secondary} bold>
                     {item.totalPrice} AED

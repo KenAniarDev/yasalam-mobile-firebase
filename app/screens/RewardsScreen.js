@@ -62,7 +62,7 @@ const RewardsScreen = ({ navigation }) => {
               width='20'
               resizeMode='contain'
               source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fyasalam-logo.png?alt=media&token=a1b2d925-a55f-46b0-8aba-e7e06018f285',
+                uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fyasalam-logo-square.png?alt=media&token=51e26d36-ceee-4bea-a6fb-df6c954cc3c4',
               }}
             ></Image>
           </View>
@@ -80,7 +80,7 @@ const RewardsScreen = ({ navigation }) => {
               width='20'
               resizeMode='contain'
               source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fyasalam-logo.png?alt=media&token=a1b2d925-a55f-46b0-8aba-e7e06018f285',
+                uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fyasalam-logo-square.png?alt=media&token=51e26d36-ceee-4bea-a6fb-df6c954cc3c4',
               }}
             ></Image>
           </View>

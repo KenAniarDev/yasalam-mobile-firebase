@@ -16,43 +16,25 @@ function RegisterTypeScreen({ navigation }) {
   return (
     <ImageBackground
       style={styles.background}
-      source={require('../assets/pattern.png')}
+      source={require('../assets/splash.jpg')}
     >
       <View intensity={100} style={styles.buttonsContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            style={styles.logo}
-            source={require('../assets/yasalam-logo.png')}
-          />
-        </View>
         <TouchableWithoutFeedback
           onPress={() =>
             navigation.navigate('Register', { type: 'Individual' })
           }
         >
-          <LinearGradient
-            colors={['#FBD800', '#FF9900']}
-            start={[0, 0]}
-            end={[1, 1]}
-            location={[0.25, 0.4, 1]}
-            style={styles.button}
-          >
+          <View style={styles.button}>
             <Text style={styles.text}>INDIVIDUAL</Text>
-          </LinearGradient>
+          </View>
         </TouchableWithoutFeedback>
 
         <TouchableWithoutFeedback
           onPress={() => navigation.navigate('Register', { type: 'Family' })}
         >
-          <LinearGradient
-            colors={['#17B9CF', '#1777CF']}
-            start={[0, 0]}
-            end={[1, 1]}
-            location={[0.25, 0.4, 1]}
-            style={styles.button}
-          >
+          <View style={styles.button}>
             <Text style={styles.text}>FAMILY</Text>
-          </LinearGradient>
+          </View>
         </TouchableWithoutFeedback>
       </View>
     </ImageBackground>
@@ -62,7 +44,7 @@ function RegisterTypeScreen({ navigation }) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   buttonsContainer: {
@@ -85,13 +67,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: colors.primary,
-    borderRadius: 30,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 15,
     paddingVertical: 20,
     width: '100%',
     marginVertical: 10,
+    borderColor: 'white',
+    borderWidth: 2,
   },
   text: {
     color: colors.white,

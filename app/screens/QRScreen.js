@@ -106,7 +106,8 @@ const QRScreen = ({ navigation }) => {
                     height='300'
                     resizeMode='contain'
                     source={{
-                      uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Foutput-onlinegiftools.gif?alt=media&token=7379ad3f-537f-4c52-aadd-af0c6c0ea2ba',
+                      // uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Foutput-onlinegiftools.gif?alt=media&token=7379ad3f-537f-4c52-aadd-af0c6c0ea2ba',
+                      uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fgif.gif?alt=media&token=7bb77c8c-db8f-4c6f-bd0a-107f4348c611',
                     }}
                     alt={'qr'}
                   />
