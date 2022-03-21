@@ -34,6 +34,8 @@ const HomeOutletList = ({ data, navigation, title }) => {
             mr='4'
             rounded='20'
             background='white'
+            borderColor={colors.primary}
+            borderWidth={1}
           >
             <Image
               size='md'

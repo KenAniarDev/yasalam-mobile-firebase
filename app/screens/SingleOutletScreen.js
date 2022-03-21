@@ -256,7 +256,7 @@ const SingleOutletScreen = ({ navigation, route }) => {
                 flexDirection='row'
                 alignItems='center'
                 justifyContent='center'
-                backgroundColor={colors.dark}
+                backgroundColor={colors.primary}
                 p='3'
                 borderRadius='10'
                 mt='2'

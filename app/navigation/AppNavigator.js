@@ -81,8 +81,9 @@ const AppNavigator = () => {
           screenOptions={{
             headerShown: false,
             drawerActiveBackgroundColor: 'white',
-            drawerActiveTintColor: colors.primary,
             drawerLabelStyle: { marginLeft: -25 },
+            drawerActiveTintColor: colors.primary,
+            drawerInactiveTintColor: 'white',
             // headerBackground: () => (
             //   <Image
             //     style={StyleSheet.absoluteFill}
@@ -103,12 +104,12 @@ const AppNavigator = () => {
                   </View>
                   <DrawerItem
                     label='Contact Us'
-                    labelStyle={{ marginLeft: -25 }}
+                    labelStyle={{ marginLeft: -25, color: 'white' }}
                     icon={({ focused, color, size }) => (
                       <MaterialIcons
                         name='contact-phone'
                         size={24}
-                        color={color}
+                        color='white'
                       />
                     )}
                     onPress={() =>
@@ -117,12 +118,12 @@ const AppNavigator = () => {
                   />
                   <DrawerItem
                     label='Terms and Condition'
-                    labelStyle={{ marginLeft: -25 }}
+                    labelStyle={{ marginLeft: -25, color: 'white' }}
                     icon={({ focused, color, size }) => (
                       <Ionicons
                         name='newspaper-sharp'
                         size={24}
-                        color={color}
+                        color='white'
                       />
                     )}
                     onPress={() =>
@@ -131,9 +132,9 @@ const AppNavigator = () => {
                   />
                   <DrawerItem
                     label='Privacy Policy'
-                    labelStyle={{ marginLeft: -25 }}
+                    labelStyle={{ marginLeft: -25, color: 'white' }}
                     icon={({ focused, color, size }) => (
-                      <MaterialIcons name='policy' size={24} color={color} />
+                      <MaterialIcons name='policy' size={24} color={'white'} />
                     )}
                     onPress={() =>
                       Linking.openURL('https://yasalamae.ae/privacy')
@@ -141,24 +142,24 @@ const AppNavigator = () => {
                   />
                   <DrawerItem
                     label='FAQs'
-                    labelStyle={{ marginLeft: -25 }}
+                    labelStyle={{ marginLeft: -25, color: 'white' }}
                     icon={({ focused, color, size }) => (
                       <MaterialCommunityIcons
                         name='head-question-outline'
                         size={24}
-                        color={color}
+                        color='white'
                       />
                     )}
                     onPress={() => Linking.openURL('https://yasalamae.ae/faqs')}
                   />
                   <DrawerItem
                     label='Instagram'
-                    labelStyle={{ marginLeft: -25 }}
+                    labelStyle={{ marginLeft: -25, color: 'white' }}
                     icon={({ focused, color, size }) => (
                       <MaterialCommunityIcons
                         name='instagram'
                         size={28}
-                        color={color}
+                        color='white'
                       />
                     )}
                     onPress={() =>
@@ -167,12 +168,12 @@ const AppNavigator = () => {
                   />
                   <DrawerItem
                     label='Facebook'
-                    labelStyle={{ marginLeft: -25 }}
+                    labelStyle={{ marginLeft: -25, color: 'white' }}
                     icon={({ focused, color, size }) => (
                       <MaterialCommunityIcons
                         name='facebook'
                         size={28}
-                        color={color}
+                        color={'white'}
                       />
                     )}
                     onPress={() =>
@@ -183,12 +184,12 @@ const AppNavigator = () => {
                   />
                   <DrawerItem
                     label='Website'
-                    labelStyle={{ marginLeft: -25 }}
+                    labelStyle={{ marginLeft: -25, color: 'white' }}
                     icon={({ focused, color, size }) => (
                       <MaterialCommunityIcons
                         name='web'
                         size={28}
-                        color={color}
+                        color={'white'}
                       />
                     )}
                     onPress={() =>
@@ -200,6 +201,18 @@ const AppNavigator = () => {
             );
           }}
         >
+          <Drawer.Screen
+            name='Profile'
+            options={{
+              headerTitle: () => (
+                <Text style={styles.headerTitle}>Profile</Text>
+              ),
+              drawerIcon: ({ color }) => (
+                <FontAwesome5 name='user-circle' size={24} color={color} />
+              ),
+            }}
+            component={AccountNavigator}
+          />
           <Drawer.Screen
             name='Home'
             component={TabNavigator}
@@ -268,18 +281,7 @@ const AppNavigator = () => {
             }}
             component={VoucherScreen}
           />
-          <Drawer.Screen
-            name='Profile'
-            options={{
-              headerTitle: () => (
-                <Text style={styles.headerTitle}>Profile</Text>
-              ),
-              drawerIcon: ({ color }) => (
-                <FontAwesome5 name='user-circle' size={24} color={color} />
-              ),
-            }}
-            component={AccountNavigator}
-          />
+
           {/* <Drawer.Screen
             name='Notifications'
             options={{

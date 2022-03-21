@@ -84,7 +84,7 @@ const QRScreen = ({ navigation }) => {
 
   return (
     <ScreenWrapper>
-      <CustomHeader navigation={navigation} title='QR CODE PAGE' />
+      <CustomHeader navigation={navigation} title='MY ROYAL' />
       {loading ? (
         <Loader />
       ) : (
@@ -95,9 +95,6 @@ const QRScreen = ({ navigation }) => {
             data={qrCodes}
             renderItem={({ item }) => (
               <Flex justifyContent='center' alignItems='center' m='4'>
-                <Text fontSize='3xl' bold>
-                  My Royal
-                </Text>
                 <View position='relative'>
                   <Image
                     left='0'
@@ -116,39 +113,53 @@ const QRScreen = ({ navigation }) => {
                   </View>
                 </View>
                 <View
-                  p='5'
+                  py='6'
+                  px='4'
                   mt='4'
                   width='100%'
-                  backgroundColor='white'
-                  borderRadius='26'
+                  backgroundColor={colors.primary}
+                  borderRadius='10'
                 >
-                  <Flex flexDirection='row' justifyContent='space-between'>
-                    <Text fontSize='sm' color='gray.500'>
-                      Name
-                    </Text>
-                    <Text fontSize='sm' bold color={colors.secondary}>
-                      {item.name}
-                    </Text>
-                  </Flex>
-                  <Flex
-                    flexDirection='row'
-                    justifyContent='space-between'
-                    my='2'
-                  >
-                    <Text fontSize='sm' color='gray.500'>
-                      Birthday
-                    </Text>
-                    <Text fontSize='sm' bold color={colors.yellow}>
-                      {item.birthdate}
-                    </Text>
-                  </Flex>
-                  <Flex flexDirection='row' justifyContent='space-between'>
-                    <Text fontSize='sm' color='gray.500'>
-                      Expiry
-                    </Text>
-                    <Text fontSize='sm' bold color={colors.primary}>
-                      {member.expiryDate}
-                    </Text>
+                  <Flex flexDirection='row' alignItems='center'>
+                    <Image
+                      left='0'
+                      size='md'
+                      width='20'
+                      height='20'
+                      resizeMode='contain'
+                      source={{
+                        uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Froyal.png?alt=media&token=5fb3934a-e8f0-4be4-a25f-7868938cc343',
+                      }}
+                      alt={'qr'}
+                    />
+                    <View ml='2' flexGrow={'1'}>
+                      <View mb='2'>
+                        <Text fontSize='sm' color='white'>
+                          Card Holder Name
+                        </Text>
+                        <Text fontSize='sm' bold color='white'>
+                          {item.name}
+                        </Text>
+                      </View>
+                      <Flex justifyContent='space-between' flexDirection='row'>
+                        <View>
+                          <Text fontSize='sm' color='white'>
+                            Birthday
+                          </Text>
+                          <Text fontSize='sm' bold color='white'>
+                            {item.birthdate}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text fontSize='sm' color='white'>
+                            Expiry
+                          </Text>
+                          <Text fontSize='sm' bold color='white'>
+                            {member.expiryDate}
+                          </Text>
+                        </View>
+                      </Flex>
+                    </View>
                   </Flex>
                 </View>
               </Flex>

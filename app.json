@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Yasalam",
-    "slug": "yasalam",
+    "name": "Royal",
+    "slug": "royal",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,7 +20,7 @@
     },
     "description": "Your newest convenient partner to access active places,engage and have fun with family-friendly vicinities, indulge with world-class dishes and more. It's about creating a place for everyone!",
     "android": {
-      "package": "com.yasalam.package",
+      "package": "com.royal.package",
       "versionCode": 1,
       "permissions": []
     }

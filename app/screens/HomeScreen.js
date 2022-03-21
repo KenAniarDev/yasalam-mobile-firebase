@@ -66,13 +66,13 @@ const HomeScreen = ({ navigation }) => {
   }, [outlets]);
 
   return (
-    <ScreenWrapper>
+    <ScreenWrapper backgroundColor='white'>
       {loading ? (
         <Loader />
       ) : (
         <ScrollView>
           <HomeBanner navigation={navigation} />
-          <Tabs active='home' navigation={navigation} />
+          <Tabs active='home' navigation={navigation} location='home' />
           <HomeOutletList
             data={categoryOutlets.hotels}
             navigation={navigation}

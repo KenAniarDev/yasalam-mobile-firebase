@@ -20,9 +20,11 @@ export default function HomeBanner({ navigation }) {
           style={styles.menuButton}
           onPress={() => navigation.toggleDrawer()}
         >
-          <Ionicons name='menu-sharp' size={34} color={colors.primary} />
+          <Ionicons name='menu-sharp' size={34} color='white' />
         </Pressable>
-
+        <Text fontSize='lg' color='white' pb='6'>
+          Level up your life style with
+        </Text>
         <Image
           height='20'
           width='20'
@@ -31,17 +33,8 @@ export default function HomeBanner({ navigation }) {
             uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fyasalam-logo.png?alt=media&token=a1b2d925-a55f-46b0-8aba-e7e06018f285',
           }}
         ></Image>
-        <Text
-          fontSize='4xl'
-          bold
-          letterSpacing={3}
-          uppercase
-          color={colors.primary}
-        >
-          Royal
-        </Text>
-        <Text fontSize='lg' color={colors.primary} pb='6'>
-          Level up your life style with
+        <Text fontSize='4xl' bold letterSpacing={3} uppercase color='white'>
+          ROYAL
         </Text>
       </View>
     </View>
@@ -52,7 +45,7 @@ const styles = StyleSheet.create({
   banner: {
     position: 'relative',
     width: '100%',
-    height: 300,
+    height: 380,
   },
   innerBanner: {
     display: 'flex',
@@ -61,7 +54,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: '#ffffff80',
+    backgroundColor: '#00000099',
+    paddingBottom: 80,
   },
   menuButton: {
     position: 'absolute',

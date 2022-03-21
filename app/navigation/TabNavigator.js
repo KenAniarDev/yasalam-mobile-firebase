@@ -17,7 +17,7 @@ const TabNavigator = () => {
         name='QRNav'
         component={QRScreen}
         options={{
-          title: 'QR Code',
+          title: 'My Royal',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name='qrcode' color={color} size={size} />
           ),

@@ -3,18 +3,27 @@ import { View, Text, Pressable, Image } from 'native-base';
 import { StyleSheet } from 'react-native';
 import colors from '../config/colors';
 
-const Tabs = ({ active, navigation }) => {
+const Tabs = ({ active, navigation, location = '' }) => {
   return (
-    <View style={styles.tabContainer}>
+    <View
+      style={[
+        styles.tabContainer,
+        { marginTop: location === 'home' ? -80 : 0 },
+      ]}
+    >
       <Image
         height='100%'
         // source={{
         //   uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fheader.jpg?alt=media&token=29a3d0b6-50ef-42c3-8f47-f109bcf9d91d',
         // }}
         source={{
-          uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Flanding.jpg?alt=media&token=58f22a66-27e1-4df2-b183-7190a5beffa2',
+          uri:
+            location === 'home'
+              ? ''
+              : 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Flanding.jpg?alt=media&token=58f22a66-27e1-4df2-b183-7190a5beffa2',
         }}
       />
+
       <View style={styles.linkContainer}>
         <Pressable
           style={[
@@ -84,9 +93,9 @@ const Tabs = ({ active, navigation }) => {
 const styles = StyleSheet.create({
   tabContainer: {
     position: 'relative',
+    zIndex: 2,
     height: 80,
     width: '100%',
-    backgroundColor: colors.dark,
   },
   linkContainer: {
     position: 'absolute',

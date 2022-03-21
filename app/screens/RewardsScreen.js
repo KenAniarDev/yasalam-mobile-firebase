@@ -49,40 +49,52 @@ const RewardsScreen = ({ navigation }) => {
       <Flex justifyContent='center' height='100%'>
         <Flex style={styles.container}>
           <View style={styles.card}>
-            <Flex justifyContent='space-between' height='100%'>
-              <Text fontSize='2xl' bold color={colors.yellow}>
-                Total Points
-              </Text>
-              <Text fontSize='2xl' color={colors.secondary}>
-                {profile.points}
-              </Text>
+            <Flex
+              justifyContent='space-between'
+              height='100%'
+              flexDirection='row'
+            >
+              <Image
+                height='20'
+                width='20'
+                resizeMode='contain'
+                source={{
+                  uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Froyal.png?alt=media&token=5fb3934a-e8f0-4be4-a25f-7868938cc343',
+                }}
+              />
+              <View ml='2'>
+                <Text fontSize='xl' color={colors.white}>
+                  Total Points
+                </Text>
+                <Text fontSize='3xl' bold color={colors.white}>
+                  {profile.points}
+                </Text>
+              </View>
             </Flex>
-            <Image
-              height='20'
-              width='20'
-              resizeMode='contain'
-              source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fyasalam-logo-square.png?alt=media&token=51e26d36-ceee-4bea-a6fb-df6c954cc3c4',
-              }}
-            ></Image>
           </View>
           <View style={styles.card}>
-            <Flex justifyContent='space-between' height='100%'>
-              <Text fontSize='2xl' bold color={colors.primary}>
-                Total Savings
-              </Text>
-              <Text fontSize='2xl' color={colors.secondary}>
-                {profile.savings} AED
-              </Text>
+            <Flex
+              justifyContent='space-between'
+              height='100%'
+              flexDirection='row'
+            >
+              <Image
+                height='20'
+                width='20'
+                resizeMode='contain'
+                source={{
+                  uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Froyal.png?alt=media&token=5fb3934a-e8f0-4be4-a25f-7868938cc343',
+                }}
+              />
+              <View ml='2'>
+                <Text fontSize='xl' color={colors.white}>
+                  Total Savings
+                </Text>
+                <Text fontSize='3xl' bold color={colors.white}>
+                  {profile.savings}
+                </Text>
+              </View>
             </Flex>
-            <Image
-              height='20'
-              width='20'
-              resizeMode='contain'
-              source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/yasalam-55cc7.appspot.com/o/mobile-app-images%2Fyasalam-logo-square.png?alt=media&token=51e26d36-ceee-4bea-a6fb-df6c954cc3c4',
-              }}
-            ></Image>
           </View>
         </Flex>
       </Flex>
@@ -99,13 +111,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    maxHeight: 200,
-    borderRadius: 15,
-    backgroundColor: colors.white,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
     marginBottom: 40,
     width: '100%',
     marginRight: 14,
     padding: 20,
+    paddingVertical: 40,
     borderColor: colors.secondary,
     borderWidth: 2,
     justifyContent: 'space-between',
