@@ -70,7 +70,7 @@ function LoginScreen({ navigation }) {
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate('RegisterType')}
           >
-            <Text style={styles.coloredText}>Join Yasalam</Text>
+            <Text style={styles.coloredText}>Join Royal</Text>
           </TouchableWithoutFeedback>
         </View>
       </View>

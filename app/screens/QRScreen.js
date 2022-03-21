@@ -96,7 +96,7 @@ const QRScreen = ({ navigation }) => {
             renderItem={({ item }) => (
               <Flex justifyContent='center' alignItems='center' m='4'>
                 <Text fontSize='3xl' bold>
-                  My YaSalam
+                  My Royal
                 </Text>
                 <View position='relative'>
                   <Image

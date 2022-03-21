@@ -60,7 +60,7 @@ const NotificationScreen = ({ navigation }) => (
           >
             <View>
               <Text fontSize='lg' bold>
-                Welcome to YaSalam
+                Welcome to Royal
               </Text>
               <Text fontSize='sm' color='coolGray.600'>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed

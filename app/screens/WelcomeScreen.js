@@ -36,7 +36,7 @@ function WelcomeScreen({ navigation }) {
           onPress={() => navigation.navigate('RegisterType')}
         >
           <View style={styles.button}>
-            <Text style={styles.text}>Yasalam Register</Text>
+            <Text style={styles.text}>Royal Register</Text>
           </View>
         </TouchableWithoutFeedback>
 

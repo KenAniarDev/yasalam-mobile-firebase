@@ -19,8 +19,12 @@ const Tabs = ({ active, navigation }) => {
         <Pressable
           style={[
             styles.linkButton,
-            { backgroundColor: active === 'yasalam' ? '#E78F7D' : '#99999999' },
-            { borderColor: active === 'yasalam' ? colors.secondary : 'white' },
+            {
+              backgroundColor: active === 'yasalam' ? '#F7D9D3' : '#99999999',
+            },
+            {
+              borderColor: active === 'yasalam' ? colors.secondary : 'white',
+            },
           ]}
           onPress={() => navigation.navigate('Yasalam')}
         >
@@ -30,7 +34,7 @@ const Tabs = ({ active, navigation }) => {
               { color: active === 'yasalam' ? colors.secondary : 'white' },
             ]}
           >
-            Yasalam
+            Royal
           </Text>
         </Pressable>
         <Pressable

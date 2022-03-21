@@ -51,7 +51,7 @@ const OTPScreen = ({ navigation, route }) => {
       setMemberLocalStorage(result.data);
       toast.show({
         title: 'Sucess  ',
-        description: 'Nice',
+        description: 'Login Success',
         status: 'success',
         placement: 'top',
       });
