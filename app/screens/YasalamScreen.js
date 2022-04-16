@@ -76,69 +76,79 @@ const YasalamScreen = ({ navigation }) => {
           width='100%'
           data={filteredOutlets}
           extraData={yasalamOutlets}
-          renderItem={({ item }) => (
-            <Pressable
-              onPress={() => navigation.navigate('SingleOutlet', { item })}
-            >
-              <Flex
-                backgroundColor='white'
-                flexDirection='row'
-                alignItems='center'
-                borderRadius='20'
-                py='10'
-                mb='4'
-                position='relative'
+          renderItem={({ item }) => {
+            if (item.isBranch) {
+              return <></>;
+            }
+            return (
+              <Pressable
+                onPress={() => navigation.navigate('SingleOutlet', { item })}
               >
-                <Image
-                  size='md'
-                  width='150'
-                  resizeMode='contain'
-                  source={{
-                    uri: item.logo,
-                  }}
-                  alt={'outlet ' + item.name}
-                />
-                <View>
-                  <Text fontSize='lg' style={{ maxWidth: 200 }}>
-                    {item.name}
-                  </Text>
-                  <Text fontSize='sm' color='gray' style={{ maxWidth: 200 }}>
-                    {item.address}
-                  </Text>
-                </View>
-
-                <Flex flexDirection='row' position='absolute' right='5' top='1'>
-                  <Text fontSize='2xl' color={colors.secondary}>
-                    {item.currentVisitDate ? (
-                      <>
-                        {item.currentVisitDate !== currentDate ? (
-                          10
-                        ) : (
-                          <>{item.visits ? 10 - item.visits : 10}</>
-                        )}
-                      </>
-                    ) : (
-                      10
-                    )}
-                  </Text>
-                  <Text mt='3'>/10</Text>
-                </Flex>
                 <Flex
+                  backgroundColor='white'
                   flexDirection='row'
                   alignItems='center'
-                  position='absolute'
-                  right='5'
-                  bottom='3'
+                  borderRadius='20'
+                  py='10'
+                  mb='4'
+                  position='relative'
                 >
-                  <Text color={colors.secondary}>{item.regionName}</Text>
-                  <Text mx='2'>|</Text>
-                  <Text color={colors.yellow}>{item.categoryName}</Text>
-                  <Text mx='2'>|</Text>
-                  <Text color={colors.primary}>{item.featureName}</Text>
+                  <Image
+                    size='md'
+                    width='150'
+                    resizeMode='contain'
+                    source={{
+                      uri: item.logo,
+                    }}
+                    alt={'outlet ' + item.name}
+                  />
+                  <View>
+                    <Text fontSize='lg' style={{ maxWidth: 200 }}>
+                      {item.name}
+                    </Text>
+                    <Text fontSize='sm' color='gray' style={{ maxWidth: 200 }}>
+                      {item.address}
+                    </Text>
+                  </View>
+
+                  <Flex
+                    flexDirection='row'
+                    position='absolute'
+                    right='5'
+                    top='1'
+                  >
+                    <Text fontSize='2xl' color={colors.secondary}>
+                      {item.currentVisitDate ? (
+                        <>
+                          {item.currentVisitDate !== currentDate ? (
+                            10
+                          ) : (
+                            <>{item.visits ? 10 - item.visits : 10}</>
+                          )}
+                        </>
+                      ) : (
+                        10
+                      )}
+                    </Text>
+                    <Text mt='3'>/10</Text>
+                  </Flex>
+                  <Flex
+                    flexDirection='row'
+                    alignItems='center'
+                    position='absolute'
+                    right='5'
+                    bottom='3'
+                  >
+                    <Text color={colors.secondary}>{item.regionName}</Text>
+                    <Text mx='2'>|</Text>
+                    <Text color={colors.yellow}>{item.categoryName}</Text>
+                    <Text mx='2'>|</Text>
+                    <Text color={colors.primary}>{item.featureName}</Text>
+                  </Flex>
                 </Flex>
-              </Flex>
-            </Pressable>
-          )}
+              </Pressable>
+            );
+          }}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           // refreshing={refreshing}
